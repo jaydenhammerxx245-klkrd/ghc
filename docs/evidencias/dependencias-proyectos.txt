@@ -1,0 +1,39 @@
+== ANTES del refactor (commit f107cb3) ==
+HotelManagement.Entities ->
+    (ninguna)
+HotelManagement.BL ->
+    [proyecto] HotelManagement.DAL
+    [proyecto] HotelManagement.Entities
+HotelManagement.DAL ->
+    [paquete]  Microsoft.EntityFrameworkCore.Sqlite
+    [paquete]  Microsoft.EntityFrameworkCore.SqlServer
+    [proyecto] HotelManagement.Entities
+HotelApp.W ->
+    [paquete]  Swashbuckle.AspNetCore
+    [proyecto] HotelManagement.BL
+    [proyecto] HotelManagement.Entities
+
+== DESPUES del refactor ==
+HotelManagement.Entities ->
+    (ninguna)
+HotelManagement.BL ->
+    [proyecto] HotelManagement.Entities
+HotelManagement.DAL ->
+    [paquete]  Microsoft.EntityFrameworkCore.Sqlite
+    [paquete]  Microsoft.EntityFrameworkCore.SqlServer
+    [proyecto] HotelManagement.BL
+    [proyecto] HotelManagement.Entities
+HotelApp.W ->
+    [paquete]  Swashbuckle.AspNetCore
+    [proyecto] HotelManagement.BL
+    [proyecto] HotelManagement.DAL
+    [proyecto] HotelManagement.Entities
+HotelManagement.Tests ->
+    [proyecto] HotelManagement.BL
+    [proyecto] HotelManagement.Entities
+HotelManagement.IntegrationTests ->
+    [paquete]  Microsoft.EntityFrameworkCore.Sqlite
+    [paquete]  Microsoft.EntityFrameworkCore.SqlServer
+    [proyecto] HotelManagement.DAL
+    [proyecto] HotelManagement.BL
+    [proyecto] HotelManagement.Entities

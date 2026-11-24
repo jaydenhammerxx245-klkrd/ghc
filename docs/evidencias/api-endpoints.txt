@@ -1,0 +1,216 @@
+Evidencia de endpoints de la API — 2026-11-23 23:35
+
+===== BUILD (edificios) =====
+### POST /api/BuildApi
+Cuerpo: {"nombre":"Torre A","descripcion":"Edificio principal","cantidadPisos":5}
+{"idBuild":1,"nombre":"Torre A","descripcion":"Edificio principal","cantidadPisos":5}
+[HTTP 201]
+
+### GET /api/BuildApi
+[{"idBuild":1,"nombre":"Torre A","descripcion":"Edificio principal","cantidadPisos":5}]
+[HTTP 200]
+
+### GET /api/BuildApi/1
+{"idBuild":1,"nombre":"Torre A","descripcion":"Edificio principal","cantidadPisos":5}
+[HTTP 200]
+
+### GET /api/BuildApi/99
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-a80d2fc895852d59bbcbb7630fff284c-b817e4d2f0dfb7da-00"}
+[HTTP 404]
+
+### PUT /api/BuildApi/1
+Cuerpo: {"idBuild":1,"nombre":"Torre A","descripcion":"Remodelado","cantidadPisos":6}
+{"idBuild":1,"nombre":"Torre A","descripcion":"Remodelado","cantidadPisos":6}
+[HTTP 200]
+
+### PUT /api/BuildApi/1
+Cuerpo: {"idBuild":2,"nombre":"X","descripcion":"X","cantidadPisos":1}
+{"mensaje":"El id de la URL no coincide con el del cuerpo."}
+[HTTP 400]
+
+### PUT /api/BuildApi/99
+Cuerpo: {"idBuild":99,"nombre":"X","descripcion":"X","cantidadPisos":1}
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-97ca626ed14021eecf42a1016de979d5-628a43e20d25f3a4-00"}
+[HTTP 404]
+
+### POST /api/BuildApi
+Cuerpo: {"nombre":"Temporal","descripcion":"Para borrar","cantidadPisos":1}
+{"idBuild":2,"nombre":"Temporal","descripcion":"Para borrar","cantidadPisos":1}
+[HTTP 201]
+
+### DELETE /api/BuildApi/2
+
+[HTTP 204]
+
+### DELETE /api/BuildApi/2
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-c2c8b00d4c26acbeeab5425e1bd26b5c-a986061086ede21d-00"}
+[HTTP 404]
+
+===== PISO =====
+### POST /api/PisoApi
+Cuerpo: {"numeroPiso":1,"idBuild":1,"nombre":"Primer piso"}
+{"idPiso":1,"numeroPiso":1,"idBuild":1,"nombre":"Primer piso"}
+[HTTP 201]
+
+### GET /api/PisoApi
+[{"idPiso":1,"numeroPiso":1,"idBuild":1,"nombre":"Primer piso"}]
+[HTTP 200]
+
+### GET /api/PisoApi/1
+{"idPiso":1,"numeroPiso":1,"idBuild":1,"nombre":"Primer piso"}
+[HTTP 200]
+
+### PUT /api/PisoApi/1
+Cuerpo: {"idPiso":1,"numeroPiso":1,"idBuild":1,"nombre":"Planta baja"}
+{"idPiso":1,"numeroPiso":1,"idBuild":1,"nombre":"Planta baja"}
+[HTTP 200]
+
+### DELETE /api/PisoApi/99
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-1bdecb482d9586f5e67fcd65500c0998-131dbe2ca12c956b-00"}
+[HTTP 404]
+
+===== CLIENTE =====
+### POST /api/ClienteApi
+Cuerpo: {"nombre":"Luis","apellido":"Paz","cedula":"001-0000001-1","telefono":"809-555-0101","correo":"luis@example.com"}
+{"idCliente":1,"nombre":"Luis","apellido":"Paz","cedula":"001-0000001-1","telefono":"809-555-0101","correo":"luis@example.com"}
+[HTTP 201]
+
+### GET /api/ClienteApi
+[{"idCliente":1,"nombre":"Luis","apellido":"Paz","cedula":"001-0000001-1","telefono":"809-555-0101","correo":"luis@example.com"}]
+[HTTP 200]
+
+### GET /api/ClienteApi/1
+{"idCliente":1,"nombre":"Luis","apellido":"Paz","cedula":"001-0000001-1","telefono":"809-555-0101","correo":"luis@example.com"}
+[HTTP 200]
+
+### PUT /api/ClienteApi/1
+Cuerpo: {"idCliente":1,"nombre":"Luis","apellido":"Paz","cedula":"001-0000001-1","telefono":"809-555-0199","correo":"luis@example.com"}
+{"idCliente":1,"nombre":"Luis","apellido":"Paz","cedula":"001-0000001-1","telefono":"809-555-0199","correo":"luis@example.com"}
+[HTTP 200]
+
+===== EMPLEADO =====
+### POST /api/EmpleadoApi
+Cuerpo: {"nombre":"Eva","apellido":"Ruiz","cedula":"002","telefono":"809-555-0202","cargo":"Recepcionista","salario":35000,"correo":"eva@example.com"}
+{"idEmpleado":1,"nombre":"Eva","apellido":"Ruiz","cedula":"002","telefono":"809-555-0202","cargo":"Recepcionista","salario":35000,"correo":"eva@example.com"}
+[HTTP 201]
+
+### GET /api/EmpleadoApi
+[{"idEmpleado":1,"nombre":"Eva","apellido":"Ruiz","cedula":"002","telefono":"809-555-0202","cargo":"Recepcionista","salario":35000.0,"correo":"eva@example.com"}]
+[HTTP 200]
+
+### PUT /api/EmpleadoApi/1
+Cuerpo: {"idEmpleado":1,"nombre":"Eva","apellido":"Ruiz","cedula":"002","telefono":"809-555-0202","cargo":"Gerente","salario":55000,"correo":"eva@example.com"}
+{"idEmpleado":1,"nombre":"Eva","apellido":"Ruiz","cedula":"002","telefono":"809-555-0202","cargo":"Gerente","salario":55000,"correo":"eva@example.com"}
+[HTTP 200]
+
+### GET /api/EmpleadoApi/1
+{"idEmpleado":1,"nombre":"Eva","apellido":"Ruiz","cedula":"002","telefono":"809-555-0202","cargo":"Gerente","salario":55000.0,"correo":"eva@example.com"}
+[HTTP 200]
+
+### DELETE /api/EmpleadoApi/1
+
+[HTTP 204]
+
+### GET /api/EmpleadoApi/1
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-818535cadf3effc3088f97f975b45dfd-038cc880d1868a33-00"}
+[HTTP 404]
+
+===== HABITACION =====
+### POST /api/HabitacionApi
+Cuerpo: {"numero":"101","capacidad":2,"precioNoche":80,"disponible":true,"idPiso":1,"precio":80,"tipo":"Doble","estado":"Libre"}
+{"idHabitacion":1,"numero":"101","capacidad":2,"precioNoche":80,"disponible":true,"idPiso":1,"precio":80,"tipo":"Doble","estado":"Libre"}
+[HTTP 201]
+
+### POST /api/HabitacionApi
+Cuerpo: {"numero":"102","capacidad":4,"precioNoche":120,"disponible":false,"idPiso":1,"precio":120,"tipo":"Suite","estado":"Mantenimiento"}
+{"idHabitacion":2,"numero":"102","capacidad":4,"precioNoche":120,"disponible":false,"idPiso":1,"precio":120,"tipo":"Suite","estado":"Mantenimiento"}
+[HTTP 201]
+
+### GET /api/HabitacionApi
+[{"idHabitacion":1,"numero":"101","capacidad":2,"precioNoche":80.0,"disponible":true,"idPiso":1,"precio":80.0,"tipo":"Doble","estado":"Libre"},{"idHabitacion":2,"numero":"102","capacidad":4,"precioNoche":120.0,"disponible":false,"idPiso":1,"precio":120.0,"tipo":"Suite","estado":"Mantenimiento"}]
+[HTTP 200]
+
+### PUT /api/HabitacionApi/1
+Cuerpo: {"idHabitacion":1,"numero":"101","capacidad":3,"precioNoche":80,"disponible":true,"idPiso":1,"precio":80,"tipo":"Triple","estado":"Libre"}
+{"idHabitacion":1,"numero":"101","capacidad":3,"precioNoche":80,"disponible":true,"idPiso":1,"precio":80,"tipo":"Triple","estado":"Libre"}
+[HTTP 200]
+
+### GET /api/HabitacionApi/1
+{"idHabitacion":1,"numero":"101","capacidad":3,"precioNoche":80.0,"disponible":true,"idPiso":1,"precio":80.0,"tipo":"Triple","estado":"Libre"}
+[HTTP 200]
+
+===== USUARIO (la API nunca devuelve la clave) =====
+### POST /api/UsuarioApi
+Cuerpo: {"nombreUsuario":"admin","clave":"S3creta!","rol":"Administrador"}
+{"idUsuario":1,"nombreUsuario":"admin","rol":"Administrador"}
+[HTTP 201]
+
+### GET /api/UsuarioApi
+[{"idUsuario":1,"nombreUsuario":"admin","rol":"Administrador"}]
+[HTTP 200]
+
+### PUT /api/UsuarioApi/1
+Cuerpo: {"idUsuario":1,"nombreUsuario":"admin","clave":"Nueva!","rol":"Supervisor"}
+{"idUsuario":1,"nombreUsuario":"admin","rol":"Supervisor"}
+[HTTP 200]
+
+===== RESERVA: operación EXITOSA (total calculado: 3 noches x 80 = 240) =====
+### POST /api/ReservaApi
+Cuerpo: {"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-01","fechaSalida":"2026-12-04"}
+{"idReserva":1,"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-01T00:00:00","fechaSalida":"2026-12-04T00:00:00","total":240.0,"noches":3}
+[HTTP 201]
+
+===== RESERVA: operaciones RECHAZADAS por reglas de negocio =====
+### POST /api/ReservaApi
+Cuerpo: {"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-03","fechaSalida":"2026-12-06"}
+{"type":"https://tools.ietf.org/html/rfc4918#section-11.2","title":"Regla de negocio violada","status":422,"detail":"La habitación 101 ya está reservada en esas fechas.","traceId":"00-9f24237882e00500358837800dbda8d5-2c55975059389aa8-00"}
+[HTTP 422]
+
+### POST /api/ReservaApi
+Cuerpo: {"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-10","fechaSalida":"2026-12-08"}
+{"type":"https://tools.ietf.org/html/rfc4918#section-11.2","title":"Regla de negocio violada","status":422,"detail":"La fecha de salida debe ser posterior a la fecha de entrada.","traceId":"00-d6241b664f020a5d5624ac39d26f2193-242cce798d465a61-00"}
+[HTTP 422]
+
+### POST /api/ReservaApi
+Cuerpo: {"idCliente":1,"idHabitacion":2,"fechaEntrada":"2026-12-10","fechaSalida":"2026-12-12"}
+{"type":"https://tools.ietf.org/html/rfc4918#section-11.2","title":"Regla de negocio violada","status":422,"detail":"La habitación 102 no está disponible.","traceId":"00-f2f1295c0db4bf95875bf021ec8ccd08-616eaf0bd8740b17-00"}
+[HTTP 422]
+
+### POST /api/ReservaApi
+Cuerpo: {"idCliente":99,"idHabitacion":1,"fechaEntrada":"2026-12-10","fechaSalida":"2026-12-12"}
+{"type":"https://tools.ietf.org/html/rfc4918#section-11.2","title":"Regla de negocio violada","status":422,"detail":"El cliente 99 no existe.","traceId":"00-5cd77b77b14c8fca63848d980552a999-34eb5c13b55fa601-00"}
+[HTTP 422]
+
+===== RESERVA: resto de endpoints =====
+### GET /api/ReservaApi
+[{"idReserva":1,"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-01T00:00:00","fechaSalida":"2026-12-04T00:00:00","total":240.0,"noches":3}]
+[HTTP 200]
+
+### GET /api/ReservaApi/1
+{"idReserva":1,"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-01T00:00:00","fechaSalida":"2026-12-04T00:00:00","total":240.0,"noches":3}
+[HTTP 200]
+
+### PUT /api/ReservaApi/1
+Cuerpo: {"idReserva":1,"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-01","fechaSalida":"2026-12-06"}
+{"idReserva":1,"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-01T00:00:00","fechaSalida":"2026-12-06T00:00:00","total":400.0,"noches":5}
+[HTTP 200]
+
+### PUT /api/ReservaApi/99
+Cuerpo: {"idReserva":99,"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-20","fechaSalida":"2026-12-21"}
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Not Found","status":404,"traceId":"00-c2b63f04a84bb6ad6481d123b6d86f47-dd7cff05d6127aa0-00"}
+[HTTP 404]
+
+### DELETE /api/ReservaApi/1
+
+[HTTP 204]
+
+### GET /api/ReservaApi
+[]
+[HTTP 200]
+
+===== VALIDACIÓN de datos =====
+### POST /api/PisoApi
+Cuerpo: {"numeroPiso":"uno"}
+{"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"piso":["The piso field is required."],"$.numeroPiso":["The JSON value could not be converted to System.Int32. Path: $.numeroPiso | LineNumber: 0 | BytePositionInLine: 19."]},"traceId":"00-1a217ed72ee42d17f39a187678adbf1a-cd64d029db4195e4-00"}
+[HTTP 400]
+

@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  HotelManagement.Entities -> C:\Users\pavel\ghc\HotelManagement.Entities\bin\Debug\net10.0\HotelManagement.Entities.dll
+  HotelManagement.BL -> C:\Users\pavel\ghc\HotelManagement.BL\bin\Debug\net10.0\HotelManagement.BL.dll
+  HotelManagement.DAL -> C:\Users\pavel\ghc\HotelManagement.DAL\bin\Debug\net10.0\HotelManagement.DAL.dll
+  HotelManagement.Tests -> C:\Users\pavel\ghc\HotelManagement.Tests\bin\Debug\net10.0\HotelManagement.Tests.dll
+  HotelManagement.IntegrationTests -> C:\Users\pavel\ghc\HotelManagement.IntegrationTests\bin\Debug\net10.0\HotelManagement.IntegrationTests.dll
+  Gestion del Hotel Crown -> C:\Users\pavel\ghc\Gestion del Hotel Crown\bin\Debug\net10.0\Gestion del Hotel Crown.dll
+  HotelApp.W -> C:\Users\pavel\ghc\HotelApp.W\bin\Debug\net10.0\HotelApp.W.dll
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+Time Elapsed 00:00:02.95

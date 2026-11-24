@@ -1,0 +1,177 @@
+### Pruebas de la API de Hotel Crown
+### Abrir en Visual Studio o VS Code (extensión REST Client) y pulsar "Send Request" en cada bloque.
+### Antes: cd HotelApp.W && dotnet run --launch-profile http
+
+@base = http://localhost:5280/api
+
+############ BUILD (edificios) ############
+POST {{base}}/BuildApi
+Content-Type: application/json
+
+{ "nombre": "Torre A", "descripcion": "Edificio principal", "cantidadPisos": 5 }
+
+###
+GET {{base}}/BuildApi
+
+###
+GET {{base}}/BuildApi/1
+
+###
+PUT {{base}}/BuildApi/1
+Content-Type: application/json
+
+{ "idBuild": 1, "nombre": "Torre A", "descripcion": "Remodelado", "cantidadPisos": 6 }
+
+###
+DELETE {{base}}/BuildApi/99
+
+############ PISO ############
+POST {{base}}/PisoApi
+Content-Type: application/json
+
+{ "numeroPiso": 1, "idBuild": 1, "nombre": "Primer piso" }
+
+###
+GET {{base}}/PisoApi
+
+###
+GET {{base}}/PisoApi/1
+
+###
+PUT {{base}}/PisoApi/1
+Content-Type: application/json
+
+{ "idPiso": 1, "numeroPiso": 1, "idBuild": 1, "nombre": "Planta baja" }
+
+###
+DELETE {{base}}/PisoApi/1
+
+############ CLIENTE ############
+POST {{base}}/ClienteApi
+Content-Type: application/json
+
+{ "nombre": "Luis", "apellido": "Paz", "cedula": "001-0000001-1", "telefono": "809-555-0101", "correo": "luis@example.com" }
+
+###
+GET {{base}}/ClienteApi
+
+###
+GET {{base}}/ClienteApi/1
+
+###
+PUT {{base}}/ClienteApi/1
+Content-Type: application/json
+
+{ "idCliente": 1, "nombre": "Luis", "apellido": "Paz", "cedula": "001-0000001-1", "telefono": "809-555-0199", "correo": "luis@example.com" }
+
+###
+DELETE {{base}}/ClienteApi/99
+
+############ EMPLEADO ############
+POST {{base}}/EmpleadoApi
+Content-Type: application/json
+
+{ "nombre": "Eva", "apellido": "Ruiz", "cedula": "002", "telefono": "809-555-0202", "cargo": "Recepcionista", "salario": 35000, "correo": "eva@example.com" }
+
+###
+GET {{base}}/EmpleadoApi
+
+###
+GET {{base}}/EmpleadoApi/1
+
+###
+PUT {{base}}/EmpleadoApi/1
+Content-Type: application/json
+
+{ "idEmpleado": 1, "nombre": "Eva", "apellido": "Ruiz", "cedula": "002", "telefono": "809-555-0202", "cargo": "Gerente", "salario": 55000, "correo": "eva@example.com" }
+
+###
+DELETE {{base}}/EmpleadoApi/1
+
+############ HABITACION ############
+POST {{base}}/HabitacionApi
+Content-Type: application/json
+
+{ "numero": "101", "capacidad": 2, "precioNoche": 80, "disponible": true, "idPiso": 1, "precio": 80, "tipo": "Doble", "estado": "Libre" }
+
+###
+POST {{base}}/HabitacionApi
+Content-Type: application/json
+
+{ "numero": "102", "capacidad": 4, "precioNoche": 120, "disponible": false, "idPiso": 1, "precio": 120, "tipo": "Suite", "estado": "Mantenimiento" }
+
+###
+GET {{base}}/HabitacionApi
+
+###
+GET {{base}}/HabitacionApi/1
+
+###
+PUT {{base}}/HabitacionApi/1
+Content-Type: application/json
+
+{ "idHabitacion": 1, "numero": "101", "capacidad": 3, "precioNoche": 80, "disponible": true, "idPiso": 1, "precio": 80, "tipo": "Triple", "estado": "Libre" }
+
+###
+DELETE {{base}}/HabitacionApi/99
+
+############ USUARIO (la respuesta nunca incluye la clave) ############
+POST {{base}}/UsuarioApi
+Content-Type: application/json
+
+{ "nombreUsuario": "admin", "clave": "S3creta!", "rol": "Administrador" }
+
+###
+GET {{base}}/UsuarioApi
+
+###
+GET {{base}}/UsuarioApi/1
+
+###
+PUT {{base}}/UsuarioApi/1
+Content-Type: application/json
+
+{ "idUsuario": 1, "nombreUsuario": "admin", "clave": "Nueva!", "rol": "Supervisor" }
+
+###
+DELETE {{base}}/UsuarioApi/99
+
+############ RESERVA ############
+### Exitosa -> 201, total = 3 noches x 80 = 240
+POST {{base}}/ReservaApi
+Content-Type: application/json
+
+{ "idCliente": 1, "idHabitacion": 1, "fechaEntrada": "2026-12-01", "fechaSalida": "2026-12-04" }
+
+### Rechazada -> 422 (se solapa con la anterior)
+POST {{base}}/ReservaApi
+Content-Type: application/json
+
+{ "idCliente": 1, "idHabitacion": 1, "fechaEntrada": "2026-12-03", "fechaSalida": "2026-12-06" }
+
+### Rechazada -> 422 (salida antes de la entrada)
+POST {{base}}/ReservaApi
+Content-Type: application/json
+
+{ "idCliente": 1, "idHabitacion": 1, "fechaEntrada": "2026-12-10", "fechaSalida": "2026-12-08" }
+
+### Rechazada -> 422 (habitación no disponible)
+POST {{base}}/ReservaApi
+Content-Type: application/json
+
+{ "idCliente": 1, "idHabitacion": 2, "fechaEntrada": "2026-12-10", "fechaSalida": "2026-12-12" }
+
+###
+GET {{base}}/ReservaApi
+
+###
+GET {{base}}/ReservaApi/1
+
+### Actualiza fechas -> total recalculado a 400
+PUT {{base}}/ReservaApi/1
+Content-Type: application/json
+
+{ "idReserva": 1, "idCliente": 1, "idHabitacion": 1, "fechaEntrada": "2026-12-01", "fechaSalida": "2026-12-06" }
+
+###
+DELETE {{base}}/ReservaApi/1
