@@ -1,0 +1,32 @@
+﻿@model IEnumerable<HotelApp.W.Models.PisoViewModel>
+
+@{
+    ViewData["Title"] = "Pisos";
+}
+
+<h2>Listado de Pisos</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Número Piso</th>
+            <th>Nombre</th>
+            <th>Bloque</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NumeroPiso</td>
+                <td>@item.Nombre</td>
+                <td>@item.IdBuild</td>
+            </tr>
+        }
+
+    </tbody>
+
+</table> 

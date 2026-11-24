@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Presentacion/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="Gestion del Hotel Crown/Gestion del Hotel Crown.csproj" />
+  <Project Path="HotelApp.W/HotelApp.W.csproj" />
+  <Project Path="HotelManagement.BL/HotelManagement.BL.csproj" />
+  <Project Path="HotelManagement.DAL/HotelManagement.DAL.csproj" />
+  <Project Path="HotelManagement.Entities/HotelManagement.Entities.csproj" />
+</Solution>

@@ -1,0 +1,52 @@
+﻿@model HotelApp.W.Models.BuildViewModel
+
+@{
+    ViewData["Title"] = "Detalle del Bloque";
+}
+
+<h2>Detalle del Bloque</h2>
+
+<div class="card">
+
+    <div class="card-header">
+        Información del Bloque
+    </div>
+
+    <div class="card-body">
+
+        <p>
+            <strong>ID:</strong>
+            @Model.IdBuild
+        </p>
+
+        <p>
+            <strong>Nombre:</strong>
+            @Model.Nombre
+        </p>
+
+        <p>
+            <strong>Descripción:</strong>
+            @Model.Descripcion
+        </p>
+
+        <p>
+            <strong>Cantidad de Pisos:</strong>
+            @Model.CantidadPisos
+        </p>
+
+    </div>
+
+</div>
+
+<br />
+
+<a asp-action="Edit"
+   asp-route-id="@Model.IdBuild"
+   class="btn btn-warning">
+    Editar
+</a>
+
+<a asp-action="Index"
+   class="btn btn-secondary">
+    Volver
+</a>

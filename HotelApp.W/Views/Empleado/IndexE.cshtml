@@ -1,0 +1,45 @@
+﻿@model IEnumerable<HotelApp.W.Models.EmpleadoViewModel>
+
+<h2>Lista de Empleados</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Nuevo Empleado
+    </a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
+            <th>Cargo</th>
+            <th>Salario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdEmpleado</td>
+                <td>@item.Nombre</td>
+                <td>@item.Apellido</td>
+                <td>@item.Cedula</td>
+                <td>@item.Telefono</td>
+                <td>@item.Cargo</td>
+                <td>@item.Salario</td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdEmpleado">Ver</a> |
+                    <a asp-action="Edit" asp-route-id="@item.IdEmpleado">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdEmpleado">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

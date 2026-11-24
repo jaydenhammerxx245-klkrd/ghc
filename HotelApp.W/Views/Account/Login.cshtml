@@ -1,0 +1,58 @@
+﻿@model HotelApp.W.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+
+        <div class="col-md-4">
+
+            <div class="card shadow">
+
+                <div class="card-header text-center bg-primary text-white">
+                    <h3>Hotel Crown</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <h4 class="text-center mb-4">
+                        Iniciar Sesión
+                    </h4>
+
+                    <form asp-action="Login" method="post">
+
+                        <div class="mb-3">
+                            <label asp-for="NombreUsuario" class="form-label"></label>
+                            <input asp-for="NombreUsuario" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Clave" class="form-label"></label>
+                            <input asp-for="Clave" type="password" class="form-control" />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                Ingresar
+                            </button>
+                        </div>
+
+                    </form>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger mt-3">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

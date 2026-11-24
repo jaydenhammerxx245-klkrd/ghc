@@ -1,0 +1,50 @@
+﻿@model HotelApp.W.Models.EmpleadoViewModel
+
+<h2>Detalle del Empleado</h2>
+
+<div class="card">
+    <div class="card-body">
+
+        <p>
+            <strong>ID:</strong>
+            @Model.IdEmpleado
+        </p>
+
+        <p>
+            <strong>Nombre:</strong>
+            @Model.Nombre
+        </p>
+
+        <p>
+            <strong>Apellido:</strong>
+            @Model.Apellido
+        </p>
+
+        <p>
+            <strong>Cédula:</strong>
+            @Model.Cedula
+        </p>
+
+        <p>
+            <strong>Teléfono:</strong>
+            @Model.Telefono
+        </p>
+
+        <p>
+            <strong>Cargo:</strong>
+            @Model.Cargo
+        </p>
+
+        <p>
+            <strong>Salario:</strong>
+            @Model.Salario
+        </p>
+
+    </div>
+</div>
+
+<br />
+
+<a asp-action="Index" class="btn btn-secondary">
+    Volver
+</a>

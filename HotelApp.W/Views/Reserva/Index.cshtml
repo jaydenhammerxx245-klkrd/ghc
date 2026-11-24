@@ -1,0 +1,43 @@
+﻿@model IEnumerable<HotelApp.W.Models.ReservaViewModel>
+
+<h2>Lista de Reservas</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Nueva Reserva
+    </a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID Reserva</th>
+            <th>ID Cliente</th>
+            <th>ID Habitación</th>
+            <th>Fecha Entrada</th>
+            <th>Fecha Salida</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdReserva</td>
+                <td>@item.IdCliente</td>
+                <td>@item.IdHabitacion</td>
+                <td>@item.FechaEntrada.ToShortDateString()</td>
+                <td>@item.FechaSalida.ToShortDateString()</td>
+                <td>@item.Total</td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdReserva">Ver</a> |
+                    <a asp-action="Edit" asp-route-id="@item.IdReserva">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdReserva">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

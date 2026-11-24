@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container mt-4">
+
+    <h1 class="text-center mb-4">
+        Hotel Crown
+    </h1>
+
+    <div class="row">
+
+        <div class="col-md-3 mb-3">
+            <a asp-controller="Cliente"
+               asp-action="Index"
+               class="btn btn-primary w-100">
+                Clientes
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <a asp-controller="Empleado"
+               asp-action="Index"
+               class="btn btn-success w-100">
+                Empleados
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <a asp-controller="Habitacion"
+               asp-action="Index"
+               class="btn btn-warning w-100">
+                Habitaciones
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <a asp-controller="Reserva"
+               asp-action="Index"
+               class="btn btn-danger w-100">
+                Reservas
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <a asp-controller="Usuario"
+               asp-action="Index"
+               class="btn btn-info w-100">
+                Usuarios
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <a asp-controller="Build"
+               asp-action="Index"
+               class="btn btn-secondary w-100">
+                Buildings
+            </a>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <a asp-controller="Piso"
+               asp-action="Index"
+               class="btn btn-dark w-100">
+                Pisos
+            </a>
+        </div>
+
+    </div>
+
+</div>

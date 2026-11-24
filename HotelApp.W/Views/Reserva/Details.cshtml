@@ -1,0 +1,45 @@
+﻿@model HotelApp.W.Models.ReservaViewModel
+
+<h2>Detalle de la Reserva</h2>
+
+<div class="card">
+    <div class="card-body">
+
+        <p>
+            <strong>ID Reserva:</strong>
+            @Model.IdReserva
+        </p>
+
+        <p>
+            <strong>ID Cliente:</strong>
+            @Model.IdCliente
+        </p>
+
+        <p>
+            <strong>ID Habitación:</strong>
+            @Model.IdHabitacion
+        </p>
+
+        <p>
+            <strong>Fecha Entrada:</strong>
+            @Model.FechaEntrada.ToShortDateString()
+        </p>
+
+        <p>
+            <strong>Fecha Salida:</strong>
+            @Model.FechaSalida.ToShortDateString()
+        </p>
+
+        <p>
+            <strong>Total:</strong>
+            @Model.Total
+        </p>
+
+    </div>
+</div>
+
+<br />
+
+<a asp-action="Index" class="btn btn-secondary">
+    Volver
+</a>

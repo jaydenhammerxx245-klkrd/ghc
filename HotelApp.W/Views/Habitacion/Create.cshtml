@@ -1,0 +1,35 @@
+﻿@model HotelApp.W.Models.HabitacionViewModel
+
+<h2>Crear Habitación</h2>
+
+<form asp-action="Create">
+
+    <div class="mb-3">
+        <label asp-for="Numero"></label>
+        <input asp-for="Numero" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Capacidad"></label>
+        <input asp-for="Capacidad" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PrecioNoche"></label>
+        <input asp-for="PrecioNoche" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Disponible"></label>
+        <input asp-for="Disponible" type="checkbox" />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Guardar
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Volver
+    </a>
+
+</form>

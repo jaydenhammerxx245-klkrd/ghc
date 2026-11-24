@@ -1,0 +1,52 @@
+﻿@model HotelApp.W.Models.PisoViewModel
+
+@{
+    ViewData["Title"] = "Detalle Piso";
+}
+
+<h2>Detalle del Piso</h2>
+
+<div class="card">
+
+    <div class="card-header">
+        Información del Piso
+    </div>
+
+    <div class="card-body">
+
+        <p>
+            <strong>ID:</strong>
+            @Model.IdPiso
+        </p>
+
+        <p>
+            <strong>Número de Piso:</strong>
+            @Model.NumeroPiso
+        </p>
+
+        <p>
+            <strong>Nombre:</strong>
+            @Model.Nombre
+        </p>
+
+        <p>
+            <strong>Bloque:</strong>
+            @Model.IdBuild
+        </p>
+
+    </div>
+
+</div>
+
+<br />
+
+<a asp-action="Edit"
+   asp-route-id="@Model.IdPiso"
+   class="btn btn-warning">
+    Editar
+</a>
+
+<a asp-action="Index"
+   class="btn btn-secondary">
+    Volver
+</a>

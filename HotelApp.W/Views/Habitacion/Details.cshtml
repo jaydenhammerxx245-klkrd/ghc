@@ -1,0 +1,40 @@
+﻿@model HotelApp.W.Models.HabitacionViewModel
+
+<h2>Detalle de la Habitación</h2>
+
+<div class="card">
+    <div class="card-body">
+
+        <p>
+            <strong>ID:</strong>
+            @Model.IdHabitacion
+        </p>
+
+        <p>
+            <strong>Número:</strong>
+            @Model.Numero
+        </p>
+
+        <p>
+            <strong>Capacidad:</strong>
+            @Model.Capacidad
+        </p>
+
+        <p>
+            <strong>Precio por Noche:</strong>
+            @Model.PrecioNoche
+        </p>
+
+        <p>
+            <strong>Disponible:</strong>
+            @(Model.Disponible ? "Sí" : "No")
+        </p>
+
+    </div>
+</div>
+
+<br />
+
+<a asp-action="Index" class="btn btn-secondary">
+    Volver
+</a>

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<HotelApp.W.Models.HabitacionViewModel>
+
+<h2>Lista de Habitaciones</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Nueva Habitación
+    </a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Número</th>
+            <th>Capacidad</th>
+            <th>Precio por Noche</th>
+            <th>Disponible</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdHabitacion</td>
+                <td>@item.Numero</td>
+                <td>@item.Capacidad</td>
+                <td>@item.PrecioNoche</td>
+                <td>@(item.Disponible ? "Sí" : "No")</td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdHabitacion">Ver</a> |
+                    <a asp-action="Edit" asp-route-id="@item.IdHabitacion">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdHabitacion">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

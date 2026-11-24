@@ -1,0 +1,30 @@
+﻿@model HotelApp.W.Models.UsuarioViewModel
+
+<h2>Detalle del Usuario</h2>
+
+<div class="card">
+    <div class="card-body">
+
+        <p>
+            <strong>ID:</strong>
+            @Model.IdUsuario
+        </p>
+
+        <p>
+            <strong>Nombre de Usuario:</strong>
+            @Model.NombreUsuario
+        </p>
+
+        <p>
+            <strong>Rol:</strong>
+            @Model.Rol
+        </p>
+
+    </div>
+</div>
+
+<br />
+
+<a asp-action="Index" class="btn btn-secondary">
+    Volver
+</a>

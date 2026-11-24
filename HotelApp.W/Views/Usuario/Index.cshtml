@@ -1,0 +1,37 @@
+﻿@model IEnumerable<HotelApp.W.Models.UsuarioViewModel>
+
+<h2>Lista de Usuarios</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Nuevo Usuario
+    </a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre de Usuario</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdUsuario</td>
+                <td>@item.NombreUsuario</td>
+                <td>@item.Rol</td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdUsuario">Ver</a> |
+                    <a asp-action="Edit" asp-route-id="@item.IdUsuario">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdUsuario">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

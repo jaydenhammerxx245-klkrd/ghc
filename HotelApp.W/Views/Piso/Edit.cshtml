@@ -1,0 +1,55 @@
+﻿@model HotelApp.W.Models.PisoViewModel
+
+@{
+    ViewData["Title"] = "Editar Piso";
+}
+
+<h2>Editar Piso</h2>
+
+<form asp-action="Edit">
+
+    <input type="hidden" asp-for="IdPiso" />
+
+    <div class="mb-3">
+        <label asp-for="NumeroPiso" class="form-label"></label>
+
+        <input asp-for="NumeroPiso"
+               class="form-control" />
+
+        <span asp-validation-for="NumeroPiso"
+              class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Nombre"
+               class="form-label"></label>
+
+        <input asp-for="Nombre"
+               class="form-control" />
+
+        <span asp-validation-for="Nombre"
+              class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">
+            Bloque
+        </label>
+
+        <select asp-for="IdBuild"
+                asp-items="ViewBag.Builds"
+                class="form-control">
+        </select>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Actualizar
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Volver
+    </a>
+
+</form>
