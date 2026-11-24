@@ -97,6 +97,7 @@ dotnet run --launch-profile http
 
 - **Swagger:** abrir `http://localhost:5280/swagger`, elegir un endpoint → *Try it out* → *Execute*.
 - **Archivo `.http`:** `HotelApp.W/HotelApp.W.http` contiene una petición lista para cada endpoint (Visual Studio o la extensión *REST Client* de VS Code).
+- **Script de demostración:** `powershell -ExecutionPolicy Bypass -File docs\demo-api.ps1 -Pausar` recorre los 35 endpoints en orden, mostrando método, cuerpo, código HTTP y respuesta, y espera *Enter* entre pasos (ideal para grabar el video).
 
 ## 6. Guion para el video explicativo (≈ 6–8 min)
 
