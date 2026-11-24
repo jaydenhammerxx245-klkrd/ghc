@@ -1,37 +1,41 @@
 ﻿@model IEnumerable<HotelManagement.Entities.Usuario>
+@{
+    ViewData["Title"] = "Usuarios";
+}
 
-<h2>Lista de Usuarios</h2>
+<partial name="_Banner" model='new BannerViewModel("Usuarios", "Cuentas con acceso al sistema y su rol.", null, "Nuevo usuario")' />
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">
-        Nuevo Usuario
-    </a>
-</p>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre de Usuario</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.IdUsuario</td>
-                <td>@item.NombreUsuario</td>
-                <td>@item.Rol</td>
-
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.IdUsuario">Ver</a> |
-                    <a asp-action="Edit" asp-route-id="@item.IdUsuario">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@item.IdUsuario">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (!Model.Any())
+{
+    <div class="hc-vacio">Todavía no hay usuarios registrados.</div>
+}
+else
+{
+    <div class="hc-tabla table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre de usuario</th>
+                    <th>Rol</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IdUsuario</td>
+                        <td class="fw-semibold">@item.NombreUsuario</td>
+                        <td><span class="badge rounded-pill text-bg-light border">@item.Rol</span></td>
+                        <td class="text-end hc-acciones">
+                            <a asp-action="Details" asp-route-id="@item.IdUsuario" class="btn btn-outline-secondary">Ver</a>
+                            <a asp-action="Edit" asp-route-id="@item.IdUsuario" class="btn btn-outline-primary">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.IdUsuario" class="btn btn-outline-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

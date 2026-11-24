@@ -1,65 +1,43 @@
 ﻿@model IEnumerable<HotelManagement.Entities.Build>
-
 @{
-    ViewData["Title"] = "Bloques";
+    ViewData["Title"] = "Edificios";
 }
 
-<h2>Listado de Bloques</h2>
+<partial name="_Banner" model='new BannerViewModel("Edificios", "Bloques que forman el hotel y su cantidad de pisos.", "~/Imagenes/Hotel/web/piscina.jpg", "Nuevo edificio")' />
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">
-        Nuevo Bloque
-    </a>
-</p>
-
-<table class="table table-bordered table-striped">
-
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Cantidad de Pisos</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-
-                <td>@item.Nombre</td>
-
-                <td>@item.Descripcion</td>
-
-                <td>@item.CantidadPisos</td>
-
-                <td>
-
-                    <a asp-action="Edit"
-                       asp-route-id="@item.IdBuild"
-                       class="btn btn-warning">
-                        Editar
-                    </a>
-
-                    <a asp-action="Details"
-                       asp-route-id="@item.IdBuild"
-                       class="btn btn-info">
-                        Detalles
-                    </a>
-
-                    <a asp-action="Delete"
-                       asp-route-id="@item.IdBuild"
-                       class="btn btn-danger">
-                        Eliminar
-                    </a>
-
-                </td>
-
-            </tr>
-        }
-
-    </tbody>
-
-</table>
+@if (!Model.Any())
+{
+    <div class="hc-vacio">Todavía no hay edificios registrados.</div>
+}
+else
+{
+    <div class="hc-tabla table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Pisos</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IdBuild</td>
+                        <td class="fw-semibold">@item.Nombre</td>
+                        <td>@item.Descripcion</td>
+                        <td>@item.CantidadPisos</td>
+                        <td class="text-end hc-acciones">
+                            <a asp-action="Details" asp-route-id="@item.IdBuild" class="btn btn-outline-secondary">Ver</a>
+                            <a asp-action="Edit" asp-route-id="@item.IdBuild" class="btn btn-outline-primary">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.IdBuild" class="btn btn-outline-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

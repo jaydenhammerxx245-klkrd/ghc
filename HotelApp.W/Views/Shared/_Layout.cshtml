@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,42 +10,39 @@
     <link rel="stylesheet" href="~/HotelApp.W.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @{
+        // Resalta en el menú la sección en la que está el usuario.
+        var controladorActual = ViewContext.RouteData.Values["controller"]?.ToString();
+        string Activo(string controlador) => controlador == controladorActual ? "nav-link active" : "nav-link";
+        var secciones = new (string Controlador, string Nombre)[]
+        {
+            ("Reserva", "Reservas"), ("Habitacion", "Habitaciones"), ("Cliente", "Clientes"),
+            ("Piso", "Pisos"), ("Build", "Edificios"), ("Empleado", "Empleados"), ("Usuario", "Usuarios"),
+        };
+    }
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Hotel Crown</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg hc-navbar mb-4">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="hc-corona">&#9819;</span>Hotel Crown
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Mostrar menú">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto gap-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="@Activo("Home")" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
+                        @foreach (var seccion in secciones)
+                        {
+                            <li class="nav-item">
+                                <a class="@Activo(seccion.Controlador)" asp-area="" asp-controller="@seccion.Controlador" asp-action="Index">@seccion.Nombre</a>
+                            </li>
+                        }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reserva" asp-action="Index">Reservas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Clientes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Habitacion" asp-action="Index">Habitaciones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Piso" asp-action="Index">Pisos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Build" asp-action="Index">Edificios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleado" asp-action="Index">Empleados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index">Usuarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="~/swagger">API (Swagger)</a>
+                            <a class="nav-link" href="~/swagger">API</a>
                         </li>
                     </ul>
                 </div>
@@ -53,7 +50,7 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-4">
             @if (TempData["Error"] is string error)
             {
                 <div class="alert alert-danger" role="alert">@error</div>
@@ -62,9 +59,10 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Hotel Crown - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer">
+        <div class="container d-flex justify-content-between">
+            <span>&copy; 2026 · Hotel Crown · Sistema de Gestión de Reservas</span>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

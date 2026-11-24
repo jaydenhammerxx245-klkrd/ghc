@@ -1,16 +1,38 @@
 using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelApp.W.Controllers
 {
     public class ReservaController : Controller
     {
         private readonly IReservaBL _reservaBL;
+        private readonly IClienteBL _clienteBL;
+        private readonly IHabitacionBL _habitacionBL;
 
-        public ReservaController(IReservaBL reservaBL)
+        public ReservaController(IReservaBL reservaBL, IClienteBL clienteBL, IHabitacionBL habitacionBL)
         {
             _reservaBL = reservaBL;
+            _clienteBL = clienteBL;
+            _habitacionBL = habitacionBL;
+        }
+
+        // Llena las listas desplegables de clientes y habitaciones del formulario.
+        private async Task CargarListasAsync(Reserva? reserva = null)
+        {
+            var clientes = (await _clienteBL.GetAllAsync())
+                .Select(c => new { c.IdCliente, Texto = $"{c.Nombre} {c.Apellido} · {c.Cedula}" });
+            var habitaciones = (await _habitacionBL.GetAllAsync())
+                .Select(h => new
+                {
+                    h.IdHabitacion,
+                    Texto = $"{h.Numero} · {(string.IsNullOrEmpty(h.Tipo) ? "Habitación" : h.Tipo)} · {h.PrecioNoche:N2} por noche"
+                            + (h.Disponible ? "" : " (no disponible)"),
+                });
+
+            ViewBag.Clientes = new SelectList(clientes, "IdCliente", "Texto", reserva?.IdCliente);
+            ViewBag.Habitaciones = new SelectList(habitaciones, "IdHabitacion", "Texto", reserva?.IdHabitacion);
         }
 
         public async Task<IActionResult> Index()
@@ -29,9 +51,10 @@ namespace HotelApp.W.Controllers
             return View(reserva);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            await CargarListasAsync();
+            return View(new Reserva { FechaEntrada = DateTime.Today, FechaSalida = DateTime.Today.AddDays(1) });
         }
 
         [HttpPost]
@@ -52,6 +75,7 @@ namespace HotelApp.W.Controllers
                 }
             }
 
+            await CargarListasAsync(reserva);
             return View(reserva);
         }
 
@@ -62,6 +86,7 @@ namespace HotelApp.W.Controllers
             if (reserva == null)
                 return NotFound();
 
+            await CargarListasAsync(reserva);
             return View(reserva);
         }
 
@@ -84,6 +109,7 @@ namespace HotelApp.W.Controllers
                 }
             }
 
+            await CargarListasAsync(reserva);
             return View(reserva);
         }
 

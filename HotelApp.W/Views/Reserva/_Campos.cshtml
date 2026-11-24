@@ -1,0 +1,32 @@
+@model HotelManagement.Entities.Reserva
+@* Campos comunes de Crear y Editar reserva. *@
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="IdCliente" class="form-label"></label>
+        <select asp-for="IdCliente" asp-items="ViewBag.Clientes" class="form-select">
+            <option value="0">Seleccionar cliente</option>
+        </select>
+        <span asp-validation-for="IdCliente" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="IdHabitacion" class="form-label"></label>
+        <select asp-for="IdHabitacion" asp-items="ViewBag.Habitaciones" class="form-select">
+            <option value="0">Seleccionar habitación</option>
+        </select>
+        <span asp-validation-for="IdHabitacion" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="FechaEntrada" class="form-label"></label>
+        <input asp-for="FechaEntrada" type="date" class="form-control" />
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="FechaSalida" class="form-label"></label>
+        <input asp-for="FechaSalida" type="date" class="form-control" />
+    </div>
+</div>

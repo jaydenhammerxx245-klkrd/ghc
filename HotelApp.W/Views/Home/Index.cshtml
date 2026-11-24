@@ -1,71 +1,145 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
+﻿@model HotelApp.W.Models.InicioViewModel
+@{
+    ViewData["Title"] = "Inicio";
+    var instalaciones = new[]
+    {
+        (Imagen: "habitacion-suite.jpg", Titulo: "Habitaciones", Texto: "Suites y habitaciones dobles con todas las comodidades.", Controlador: "Habitacion"),
+        (Imagen: "piscina.jpg", Titulo: "Piscina", Texto: "Piscina al aire libre rodeada de terrazas y jardines.", Controlador: (string?)null),
+        (Imagen: "restaurante.jpg", Titulo: "Restaurante", Texto: "Buffet internacional en desayuno, almuerzo y cena.", Controlador: (string?)null),
+        (Imagen: "atracciones.jpg", Titulo: "Atracciones", Texto: "Parque acuático y actividades para toda la familia.", Controlador: (string?)null),
+    };
+    var modulos = new[]
+    {
+        ("Reserva", "Reservas", "Crear y gestionar estadías"),
+        ("Cliente", "Clientes", "Huéspedes registrados"),
+        ("Habitacion", "Habitaciones", "Inventario y disponibilidad"),
+        ("Piso", "Pisos", "Pisos de cada edificio"),
+        ("Build", "Edificios", "Bloques del hotel"),
+        ("Empleado", "Empleados", "Personal del hotel"),
+        ("Usuario", "Usuarios", "Accesos al sistema"),
+    };
 }
 
-<div class="container mt-4">
-
-    <h1 class="text-center mb-4">
-        Hotel Crown
-    </h1>
-
-    <div class="row">
-
-        <div class="col-md-3 mb-3">
-            <a asp-controller="Cliente"
-               asp-action="Index"
-               class="btn btn-primary w-100">
-                Clientes
-            </a>
+<section class="hc-hero" style="background-image: url('@Url.Content("~/Imagenes/Hotel/web/piscina.jpg")')">
+    <div class="hc-hero-contenido">
+        <span class="hc-eyebrow">Sistema de gestión de reservas</span>
+        <h1>Bienvenido a Hotel Crown</h1>
+        <p>Administre reservas, habitaciones, huéspedes y personal desde un solo lugar.</p>
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            <a asp-controller="Reserva" asp-action="Create" class="btn btn-dorado btn-lg">+ Nueva reserva</a>
+            <a asp-controller="Habitacion" asp-action="Index" class="btn btn-outline-light btn-lg">Ver habitaciones</a>
         </div>
-
-        <div class="col-md-3 mb-3">
-            <a asp-controller="Empleado"
-               asp-action="Index"
-               class="btn btn-success w-100">
-                Empleados
-            </a>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <a asp-controller="Habitacion"
-               asp-action="Index"
-               class="btn btn-warning w-100">
-                Habitaciones
-            </a>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <a asp-controller="Reserva"
-               asp-action="Index"
-               class="btn btn-danger w-100">
-                Reservas
-            </a>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <a asp-controller="Usuario"
-               asp-action="Index"
-               class="btn btn-info w-100">
-                Usuarios
-            </a>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <a asp-controller="Build"
-               asp-action="Index"
-               class="btn btn-secondary w-100">
-                Buildings
-            </a>
-        </div>
-
-        <div class="col-md-3 mb-3">
-            <a asp-controller="Piso"
-               asp-action="Index"
-               class="btn btn-dark w-100">
-                Pisos
-            </a>
-        </div>
-
     </div>
+</section>
 
+<div class="row g-3 mt-2">
+    <div class="col-6 col-lg-3">
+        <div class="hc-stat">
+            <div class="valor">@Model.Reservas</div>
+            <div class="etiqueta">Reservas registradas</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="hc-stat">
+            <div class="valor">@Model.HabitacionesDisponibles<span class="fs-5 text-secondary"> / @Model.Habitaciones</span></div>
+            <div class="etiqueta">Habitaciones disponibles</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="hc-stat">
+            <div class="valor">@Model.Clientes</div>
+            <div class="etiqueta">Clientes · @Model.Empleados empleados</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="hc-stat">
+            <div class="valor">@Model.IngresosReservados.ToString("N2")</div>
+            <div class="etiqueta">Total reservado</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <h3 class="hc-seccion-titulo">Próximas reservas</h3>
+        @if (Model.ProximasReservas.Count == 0)
+        {
+            <div class="hc-vacio">
+                No hay reservas próximas.
+                <div class="mt-3"><a asp-controller="Reserva" asp-action="Create" class="btn btn-dorado">+ Crear la primera reserva</a></div>
+            </div>
+        }
+        else
+        {
+            <div class="hc-tabla">
+                <table class="table table-hover">
+                    <thead>
+                        <tr><th>#</th><th>Cliente</th><th>Habitación</th><th>Entrada</th><th>Salida</th><th class="text-end">Total</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.ProximasReservas)
+                        {
+                            <tr>
+                                <td><a asp-controller="Reserva" asp-action="Details" asp-route-id="@r.IdReserva">@r.IdReserva</a></td>
+                                <td>@r.IdCliente</td>
+                                <td>@r.IdHabitacion</td>
+                                <td>@r.FechaEntrada.ToString("dd/MM/yyyy")</td>
+                                <td>@r.FechaSalida.ToString("dd/MM/yyyy")</td>
+                                <td class="text-end fw-semibold">@r.Total.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <div class="col-lg-5">
+        <h3 class="hc-seccion-titulo">Recepción</h3>
+        <div class="hc-card">
+            <img src="~/Imagenes/Hotel/web/recepcion.jpg" alt="Mostrador de recepción del hotel" />
+            <div class="card-body p-3">
+                <h5 class="card-title">Atención 24 horas</h5>
+                <p class="text-secondary mb-0">Registre nuevas reservas: el sistema valida la disponibilidad, evita choques de fechas y calcula el total automáticamente.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="hc-seccion-titulo">Nuestras instalaciones</h3>
+<div class="row g-3">
+    @foreach (var i in instalaciones)
+    {
+        <div class="col-sm-6 col-lg-3">
+            <div class="hc-card">
+                <img src="~/Imagenes/Hotel/web/@i.Imagen" alt="@i.Titulo" />
+                <div class="card-body p-3">
+                    <h5 class="card-title">@i.Titulo</h5>
+                    <p class="text-secondary small mb-0">@i.Texto</p>
+                    @if (i.Controlador != null)
+                    {
+                        <a asp-controller="@i.Controlador" asp-action="Index" class="stretched-link"></a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<h3 class="hc-seccion-titulo">Módulos del sistema</h3>
+<div class="row g-3 mb-3">
+    @foreach (var (controlador, nombre, descripcion) in modulos)
+    {
+        <div class="col-6 col-md-4 col-lg-3">
+            <a class="hc-modulo" asp-controller="@controlador" asp-action="Index">
+                @nombre
+                <small>@descripcion</small>
+            </a>
+        </div>
+    }
+    <div class="col-6 col-md-4 col-lg-3">
+        <a class="hc-modulo" href="~/swagger">
+            API REST
+            <small>Documentación Swagger</small>
+        </a>
+    </div>
 </div>

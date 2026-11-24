@@ -11,6 +11,14 @@ Aplicación ASP.NET Core (.NET 10) con arquitectura por capas: web MVC + API RES
 | Desarrollo de la capa de API | [docs/03-Capa-de-API.pdf](docs/03-Capa-de-API.pdf) ([md](docs/03-Capa-de-API.md)) |
 | Salidas de compilación, pruebas y llamadas a la API | [docs/evidencias/](docs/evidencias/) |
 
+## Interfaz
+
+Panel de inicio con indicadores, próximas reservas, instalaciones del hotel y acceso a cada módulo. Cada sección (Reservas, Habitaciones, Clientes, Pisos, Edificios, Empleados, Usuarios) tiene listado, detalle, alta, edición y baja; el formulario de reserva usa listas de clientes y habitaciones y muestra el motivo cuando una regla de negocio la rechaza.
+
+![Panel de inicio](docs/evidencias/capturas/web-inicio.jpg)
+
+Las imágenes del hotel están en `HotelApp.W/wwwroot/Imagenes/Hotel/`; la interfaz usa copias optimizadas para web en la subcarpeta `web/`.
+
 ## Estructura
 
 | Proyecto | Responsabilidad | Depende de |

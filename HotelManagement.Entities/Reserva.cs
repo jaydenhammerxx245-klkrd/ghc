@@ -1,16 +1,29 @@
-﻿namespace HotelManagement.Entities
+using System.ComponentModel.DataAnnotations;
+
+namespace HotelManagement.Entities
 {
     public class Reserva
     {
+        [Display(Name = "Reserva")]
         public int IdReserva { get; set; }
+
+        [Display(Name = "Cliente")]
 
         public int IdCliente { get; set; }
 
+        [Display(Name = "Habitación")]
+
         public int IdHabitacion { get; set; }
+
+        [Display(Name = "Fecha de entrada")]
 
         public DateTime FechaEntrada { get; set; }
 
+        [Display(Name = "Fecha de salida")]
+
         public DateTime FechaSalida { get; set; }
+
+        [Display(Name = "Total")]
 
         public decimal Total { get; set; }
 

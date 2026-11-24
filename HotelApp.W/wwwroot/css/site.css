@@ -1,25 +1,274 @@
+/* =========================================================
+   Hotel Crown — estilos de la interfaz
+   Paleta: azul marino (marca), dorado (acento), fondo claro.
+   ========================================================= */
+
+:root {
+  --hc-marino: #14284b;
+  --hc-marino-2: #1f3d6e;
+  --hc-dorado: #c9a24d;
+  --hc-dorado-claro: #f3e7c9;
+  --hc-fondo: #f5f6f8;
+  --hc-texto: #1f2933;
+  --hc-suave: #6b7785;
+  --hc-radio: 14px;
+  --hc-sombra: 0 6px 24px rgba(20, 40, 75, .08);
+}
+
 html {
   font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
   position: relative;
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+@media (min-width: 768px) {
+  html { font-size: 16px; }
 }
+
+body {
+  background: var(--hc-fondo);
+  color: var(--hc-texto);
+  margin-bottom: 70px;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-select:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem rgba(201, 162, 77, .55);
+}
+
+/* ---------- Barra de navegación ---------- */
+.hc-navbar {
+  background: var(--hc-marino);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .15);
+}
+
+.hc-navbar .navbar-brand {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.hc-navbar .navbar-brand .hc-corona { color: var(--hc-dorado); margin-right: .35rem; }
+
+.hc-navbar .nav-link {
+  color: rgba(255, 255, 255, .8);
+  border-radius: 8px;
+  padding: .45rem .8rem !important;
+}
+
+.hc-navbar .nav-link:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+
+.hc-navbar .nav-link.active {
+  color: var(--hc-marino);
+  background: var(--hc-dorado);
+  font-weight: 600;
+}
+
+.hc-navbar .navbar-toggler { border-color: rgba(255, 255, 255, .4); }
+.hc-navbar .navbar-toggler-icon { filter: invert(1); }
+
+/* ---------- Pie de página ---------- */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  line-height: 60px;
+  background: #fff;
+  color: var(--hc-suave);
+}
+
+/* ---------- Portada (inicio) ---------- */
+.hc-hero {
+  position: relative;
+  min-height: 380px;
+  border-radius: var(--hc-radio);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  background: var(--hc-marino) center / cover no-repeat;
+  box-shadow: var(--hc-sombra);
+}
+
+.hc-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20, 40, 75, .88) 0%, rgba(20, 40, 75, .55) 55%, rgba(20, 40, 75, .1) 100%);
+}
+
+.hc-hero-contenido {
+  position: relative;
+  padding: 2.5rem;
+  color: #fff;
+  max-width: 640px;
+}
+
+.hc-hero h1 { font-weight: 800; font-size: 2.6rem; }
+.hc-hero p { color: rgba(255, 255, 255, .85); font-size: 1.1rem; }
+
+.hc-eyebrow {
+  display: inline-block;
+  color: var(--hc-dorado);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: .8rem;
+  margin-bottom: .5rem;
+}
+
+.btn-dorado {
+  background: var(--hc-dorado);
+  border-color: var(--hc-dorado);
+  color: var(--hc-marino);
+  font-weight: 600;
+}
+
+.btn-dorado:hover { background: #b88f38; border-color: #b88f38; color: #fff; }
+
+/* ---------- Indicadores ---------- */
+.hc-stat {
+  background: #fff;
+  border-radius: var(--hc-radio);
+  padding: 1.25rem 1.4rem;
+  box-shadow: var(--hc-sombra);
+  border-left: 5px solid var(--hc-dorado);
+  height: 100%;
+}
+
+.hc-stat .valor { font-size: 2rem; font-weight: 800; color: var(--hc-marino); line-height: 1.1; }
+.hc-stat .etiqueta { color: var(--hc-suave); font-size: .9rem; }
+
+/* ---------- Tarjetas con imagen ---------- */
+.hc-card {
+  border: none;
+  border-radius: var(--hc-radio);
+  overflow: hidden;
+  box-shadow: var(--hc-sombra);
+  transition: transform .15s ease, box-shadow .15s ease;
+  height: 100%;
+  background: #fff;
+}
+
+.hc-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(20, 40, 75, .14); }
+
+.hc-card img { height: 170px; object-fit: cover; width: 100%; }
+
+.hc-card .card-title { color: var(--hc-marino); font-weight: 700; }
+
+a.hc-card-link { text-decoration: none; color: inherit; }
+
+/* Accesos rápidos a los módulos */
+.hc-modulo {
+  display: block;
+  background: #fff;
+  border-radius: var(--hc-radio);
+  padding: 1.1rem 1.2rem;
+  box-shadow: var(--hc-sombra);
+  text-decoration: none;
+  color: var(--hc-marino);
+  font-weight: 600;
+  border-top: 4px solid var(--hc-marino-2);
+  transition: border-color .15s ease, transform .15s ease;
+  height: 100%;
+}
+
+.hc-modulo:hover { border-top-color: var(--hc-dorado); transform: translateY(-2px); color: var(--hc-marino); }
+.hc-modulo small { display: block; color: var(--hc-suave); font-weight: 400; margin-top: .2rem; }
+
+.hc-seccion-titulo {
+  color: var(--hc-marino);
+  font-weight: 700;
+  margin: 2.2rem 0 1rem;
+}
+
+/* ---------- Encabezado de cada módulo ---------- */
+.hc-banner {
+  position: relative;
+  border-radius: var(--hc-radio);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(120deg, var(--hc-marino) 0%, var(--hc-marino-2) 100%) center / cover no-repeat;
+  box-shadow: var(--hc-sombra);
+}
+
+.hc-banner.con-imagen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(20, 40, 75, .9) 0%, rgba(20, 40, 75, .6) 60%, rgba(20, 40, 75, .25) 100%);
+}
+
+.hc-banner-contenido {
+  position: relative;
+  padding: 1.5rem 2rem;
+  color: #fff;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.hc-banner h1 { font-size: 1.9rem; font-weight: 800; margin: 0; }
+.hc-banner p { margin: .25rem 0 0; color: rgba(255, 255, 255, .8); }
+
+/* ---------- Tablas ---------- */
+.hc-tabla {
+  background: #fff;
+  border-radius: var(--hc-radio);
+  box-shadow: var(--hc-sombra);
+  overflow: hidden;
+}
+
+.hc-tabla table { margin: 0; }
+
+.hc-tabla thead th {
+  background: var(--hc-marino);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  white-space: nowrap;
+}
+
+.hc-tabla td { vertical-align: middle; }
+
+.hc-acciones { white-space: nowrap; }
+.hc-acciones .btn { padding: .2rem .55rem; font-size: .85rem; }
+
+.hc-vacio {
+  background: #fff;
+  border-radius: var(--hc-radio);
+  box-shadow: var(--hc-sombra);
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--hc-suave);
+}
+
+.badge-disponible { background: #e3f4e8; color: #1e7a3c; }
+.badge-ocupada { background: #fde2e2; color: #b42318; }
+
+/* ---------- Formularios y detalles (todas las vistas) ---------- */
+main > form,
+main > .card,
+main > .container > form {
+  background: #fff;
+  border-radius: var(--hc-radio);
+  box-shadow: var(--hc-sombra);
+  padding: 1.75rem;
+  border: none;
+  max-width: 900px;
+}
+
+main > h2 {
+  color: var(--hc-marino);
+  font-weight: 800;
+  margin-bottom: 1.25rem;
+}
+
+.form-label, main label { font-weight: 600; color: var(--hc-marino); }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);

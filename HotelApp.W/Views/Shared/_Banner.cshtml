@@ -1,0 +1,18 @@
+@model HotelApp.W.Models.BannerViewModel
+@{
+    var conImagen = !string.IsNullOrEmpty(Model.Imagen);
+    var estilo = conImagen ? $"background-image: url('{Url.Content(Model.Imagen)}')" : null;
+}
+
+<section class="hc-banner @(conImagen ? "con-imagen" : "")" style="@estilo">
+    <div class="hc-banner-contenido">
+        <div>
+            <h1>@Model.Titulo</h1>
+            <p>@Model.Descripcion</p>
+        </div>
+        @if (Model.TextoBotonNuevo != null)
+        {
+            <a asp-action="Create" class="btn btn-dorado btn-lg">+ @Model.TextoBotonNuevo</a>
+        }
+    </div>
+</section>

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelManagement.Entities
 {
@@ -7,12 +7,15 @@ namespace HotelManagement.Entities
         public int IdUsuario { get; set; }
 
         [Required(ErrorMessage = "El nombre de usuario es obligatorio.")]
+        [Display(Name = "Nombre de usuario")]
         public string NombreUsuario { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La clave es obligatoria.")]
+        [Display(Name = "Clave")]
         public string Clave { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El rol es obligatorio.")]
+        [Display(Name = "Rol")]
         public string Rol { get; set; } = string.Empty;
     }
 }

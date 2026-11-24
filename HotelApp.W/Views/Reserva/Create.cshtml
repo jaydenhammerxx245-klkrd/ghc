@@ -1,38 +1,24 @@
 ﻿@model HotelManagement.Entities.Reserva
+@{
+    ViewData["Title"] = "Nueva reserva";
+}
 
-<h2>Crear Reserva</h2>
+<h2>Nueva reserva</h2>
 
 <form asp-action="Create">
 
     <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="IdCliente"></label>
-        <input asp-for="IdCliente" class="form-control" />
-    </div>
+    <partial name="_Campos" model="Model" />
 
-    <div class="mb-3">
-        <label asp-for="IdHabitacion"></label>
-        <input asp-for="IdHabitacion" class="form-control" />
-    </div>
+    <p class="text-muted">El total se calcula automáticamente: noches × precio por noche de la habitación.
+        El sistema rechaza la reserva si la habitación no está disponible o ya está ocupada en esas fechas.</p>
 
-    <div class="mb-3">
-        <label asp-for="FechaEntrada"></label>
-        <input asp-for="FechaEntrada" type="date" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="FechaSalida"></label>
-        <input asp-for="FechaSalida" type="date" class="form-control" />
-    </div>
-
-    <p class="text-muted">El total se calcula automáticamente: noches × precio por noche de la habitación.</p>
-
-    <button type="submit" class="btn btn-success">
-        Guardar
+    <button type="submit" class="btn btn-dorado">
+        Guardar reserva
     </button>
 
-    <a asp-action="Index" class="btn btn-secondary">
+    <a asp-action="Index" class="btn btn-outline-secondary">
         Volver
     </a>
 

@@ -1,6 +1,9 @@
 ﻿@model HotelManagement.Entities.Reserva
+@{
+    ViewData["Title"] = "Editar reserva";
+}
 
-<h2>Editar Reserva</h2>
+<h2>Editar reserva #@Model.IdReserva</h2>
 
 <form asp-action="Edit">
 
@@ -8,37 +11,19 @@
 
     <input type="hidden" asp-for="IdReserva" />
 
-    <div class="mb-3">
-        <label asp-for="IdCliente"></label>
-        <input asp-for="IdCliente" class="form-control" />
-    </div>
+    <partial name="_Campos" model="Model" />
 
     <div class="mb-3">
-        <label asp-for="IdHabitacion"></label>
-        <input asp-for="IdHabitacion" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="FechaEntrada"></label>
-        <input asp-for="FechaEntrada" type="date" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="FechaSalida"></label>
-        <input asp-for="FechaSalida" type="date" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Total"></label>
+        <label asp-for="Total" class="form-label"></label>
         <input asp-for="Total" class="form-control" readonly />
-        <small class="text-muted">Se calcula automáticamente: noches × precio por noche.</small>
+        <small class="text-muted">Se recalcula automáticamente al guardar: noches × precio por noche.</small>
     </div>
 
-    <button type="submit" class="btn btn-warning">
+    <button type="submit" class="btn btn-dorado">
         Actualizar
     </button>
 
-    <a asp-action="Index" class="btn btn-secondary">
+    <a asp-action="Index" class="btn btn-outline-secondary">
         Volver
     </a>
 

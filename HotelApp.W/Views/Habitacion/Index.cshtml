@@ -1,41 +1,56 @@
 ﻿@model IEnumerable<HotelManagement.Entities.Habitacion>
+@{
+    ViewData["Title"] = "Habitaciones";
+}
 
-<h2>Lista de Habitaciones</h2>
+<partial name="_Banner" model='new BannerViewModel("Habitaciones", "Inventario de habitaciones, precios y disponibilidad para reservar.", "~/Imagenes/Hotel/web/habitacion-clasica.jpg", "Nueva habitación")' />
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">
-        Nueva Habitación
-    </a>
-</p>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Número</th>
-            <th>Capacidad</th>
-            <th>Precio por Noche</th>
-            <th>Disponible</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.IdHabitacion</td>
-                <td>@item.Numero</td>
-                <td>@item.Capacidad</td>
-                <td>@item.PrecioNoche</td>
-                <td>@(item.Disponible ? "Sí" : "No")</td>
-
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.IdHabitacion">Ver</a> |
-                    <a asp-action="Edit" asp-route-id="@item.IdHabitacion">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@item.IdHabitacion">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (!Model.Any())
+{
+    <div class="hc-vacio">Todavía no hay habitaciones registradas.</div>
+}
+else
+{
+    <div class="hc-tabla table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Tipo</th>
+                    <th>Piso</th>
+                    <th>Capacidad</th>
+                    <th class="text-end">Precio / noche</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@item.Numero</td>
+                        <td>@(string.IsNullOrEmpty(item.Tipo) ? "—" : item.Tipo)</td>
+                        <td>@item.IdPiso</td>
+                        <td>@item.Capacidad personas</td>
+                        <td class="text-end">@item.PrecioNoche.ToString("N2")</td>
+                        <td>
+                            @if (item.Disponible)
+                            {
+                                <span class="badge rounded-pill badge-disponible">Disponible</span>
+                            }
+                            else
+                            {
+                                <span class="badge rounded-pill badge-ocupada">No disponible</span>
+                            }
+                        </td>
+                        <td class="text-end hc-acciones">
+                            <a asp-action="Details" asp-route-id="@item.IdHabitacion" class="btn btn-outline-secondary">Ver</a>
+                            <a asp-action="Edit" asp-route-id="@item.IdHabitacion" class="btn btn-outline-primary">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.IdHabitacion" class="btn btn-outline-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
