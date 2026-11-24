@@ -43,7 +43,15 @@ builder.Services.AddScoped<IClienteBL, ClienteBL>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new() { Title = "Hotel Crown API", Version = "v1",
+        Description = "API REST del Sistema de Gestión de Reservas de Hoteles." });
+
+    var xml = Path.Combine(AppContext.BaseDirectory, $"{typeof(Program).Assembly.GetName().Name}.xml");
+    if (File.Exists(xml))
+        options.IncludeXmlComments(xml);
+});
 
 var app = builder.Build();
 

@@ -94,9 +94,13 @@ Otros rechazos registrados (todos 422):
 
 ### 3.2 En la interfaz web (MVC)
 
-Al crear desde **Reservas → Nueva Reserva** con la habitación 102, el formulario no se guarda y muestra:
+Al crear desde **Reservas → Nueva Reserva** con la habitación 102, el formulario no se guarda y muestra el motivo:
 
-> ⚠ La habitación 102 no está disponible.
+![Reserva rechazada en la interfaz web](evidencias/capturas/web-reserva-rechazada.png)
+
+La reserva válida sí queda registrada, con el total calculado por el sistema:
+
+![Listado de reservas](evidencias/capturas/web-reservas-lista.png)
 
 ---
 
@@ -105,7 +109,7 @@ Al crear desde **Reservas → Nueva Reserva** con la habitación 102, el formula
 1. **Por referencias de proyecto.** `HotelManagement.Tests.csproj` solo referencia `HotelManagement.BL` y `HotelManagement.Entities`. No referencia la DAL ni ningún paquete de Entity Framework, así que **no puede** abrir una base de datos aunque quisiera (ver `docs/evidencias/dependencias-proyectos.txt`).
 2. **Por sustitución.** Las pruebas crean `ReservaBL` con repositorios falsos en memoria (`Fakes/RepositoriosEnMemoria.cs`) que implementan `IReservaRepositorio`, `IHabitacionRepositorio` e `IClienteRepositorio`. Esto solo es posible porque esas interfaces ahora pertenecen al negocio.
 3. **Por prueba automática de arquitectura.** `ArquitecturaTests` inspecciona los ensamblados compilados de BL y Entities y falla si aparece una referencia a `HotelManagement.DAL`, `Microsoft.EntityFrameworkCore*` o `Microsoft.Data.SqlClient`.
-4. **Por tiempo de ejecución.** Las 21 pruebas terminan en menos de 0,2 s sin ningún servidor de base de datos instalado (el equipo de prueba no tiene SQL Server).
+4. **Por entorno de ejecución.** Las 21 pruebas terminan en unos 0,2 s en un equipo que no tiene SQL Server instalado: no hay ninguna base de datos a la que pudieran conectarse.
 
 Comparación de dependencias:
 

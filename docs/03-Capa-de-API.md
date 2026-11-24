@@ -54,6 +54,10 @@ Las 7 entidades exponen los mismos 5 métodos (35 endpoints en total). `{Entidad
 - **Usuario:** la clave se recibe al crear o actualizar, pero **nunca se devuelve** en las respuestas.
 - Validación automática (`[ApiController]`): tipos incorrectos o campos obligatorios faltantes devuelven **400** con el detalle de cada campo.
 
+Cada endpoint está documentado en Swagger con su descripción y sus códigos de respuesta:
+
+![Endpoints en Swagger](evidencias/capturas/swagger-endpoints.png)
+
 ### Ejemplos
 
 ```http
