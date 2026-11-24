@@ -77,7 +77,8 @@ namespace HotelApp.W.Controllers
             if (build == null)
                 return NotFound();
 
-            return View(build);
+            ViewBag.Descripcion = $"el bloque \"{build.Nombre}\"";
+            return View("ConfirmDelete", id);
         }
 
         [HttpPost, ActionName("Delete")]

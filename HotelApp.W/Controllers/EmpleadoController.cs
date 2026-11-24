@@ -5,7 +5,7 @@ namespace HotelApp.W.Controllers
 {
     public class EmpleadoController : Controller
     {
-        private static readonly List<EmpleadoViewModel> empleados = [new()];
+        private static readonly List<EmpleadoViewModel> empleados = [];
 
    
         public IActionResult Index()
@@ -21,7 +21,7 @@ namespace HotelApp.W.Controllers
         [HttpPost]
         public IActionResult Create(EmpleadoViewModel empleado)
         {
-            empleado.IdEmpleado = empleados.Count + 1;
+            empleado.IdEmpleado = empleados.Count == 0 ? 1 : empleados.Max(e => e.IdEmpleado) + 1;
 
             empleados.Add(empleado);
 

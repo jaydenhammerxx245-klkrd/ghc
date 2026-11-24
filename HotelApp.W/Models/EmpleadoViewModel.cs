@@ -14,6 +14,6 @@
 
         public string Cargo { get; set; } = string.Empty;
         public decimal Salario { get; set; }
-        public string  Correo { get; internal set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
     }
 }

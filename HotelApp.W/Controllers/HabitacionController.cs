@@ -1,9 +1,6 @@
-﻿using HotelApp.W.Models;
-using HotelManagement.BL.Interfaces;
-using HotelManagement.BL.Services;
+﻿using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelApp.W.Controllers
 {
@@ -21,7 +18,24 @@ namespace HotelApp.W.Controllers
             var habitaciones = await _habitacionBL.GetAllAsync();
             return View(habitaciones);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var habitacion = await _habitacionBL.GetByIdAsync(id);
+
+            if (habitacion == null)
+                return NotFound();
+
+            return View(habitacion);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Habitacion habitacion)
         {
             if (ModelState.IsValid)
@@ -33,19 +47,18 @@ namespace HotelApp.W.Controllers
             return View(habitacion);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Crear(Habitacion habitacion)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (ModelState.IsValid)
-            {
-                await _habitacionBL.AddAsync(habitacion);
-                return RedirectToAction(nameof(Index));
-            }
+            var habitacion = await _habitacionBL.GetByIdAsync(id);
+
+            if (habitacion == null)
+                return NotFound();
 
             return View(habitacion);
         }
-         
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Habitacion habitacion)
         {
             if (ModelState.IsValid)
@@ -57,14 +70,20 @@ namespace HotelApp.W.Controllers
             return View(habitacion);
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var habitacion = await _habitacionBL.GetByIdAsync(id);
-            return View(habitacion);
+
+            if (habitacion == null)
+                return NotFound();
+
+            ViewBag.Descripcion = $"la habitación {habitacion.Numero}";
+            return View("ConfirmDelete", id);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _habitacionBL.DeleteAsync(id);
             return RedirectToAction(nameof(Index));

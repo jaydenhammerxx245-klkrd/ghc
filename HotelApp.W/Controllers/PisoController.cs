@@ -1,16 +1,26 @@
 ﻿using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelApp.W.Controllers
 {
     public class PisoController : Controller
     {
         private readonly IPisoBL _pisoBL;
+        private readonly IBuildBL _buildBL;
 
-        public PisoController(IPisoBL pisoBL)
+        public PisoController(IPisoBL pisoBL, IBuildBL buildBL)
         {
             _pisoBL = pisoBL;
+            _buildBL = buildBL;
+        }
+
+        // Llena el desplegable de bloques que usan las vistas Create/Edit.
+        private async Task CargarBuildsAsync(int? seleccionado = null)
+        {
+            var builds = await _buildBL.ObtenerTodosAsync();
+            ViewBag.Builds = new SelectList(builds, nameof(Build.IdBuild), nameof(Build.Nombre), seleccionado);
         }
 
         public async Task<IActionResult> Index()
@@ -29,14 +39,14 @@ namespace HotelApp.W.Controllers
             return View(piso);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await CargarBuildsAsync();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-         
         public async Task<IActionResult> Create(Piso piso)
         {
             if (ModelState.IsValid)
@@ -45,10 +55,23 @@ namespace HotelApp.W.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            await CargarBuildsAsync(piso.IdBuild);
+            return View(piso);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var piso = await _pisoBL.ObtenerPorIdAsync(id);
+
+            if (piso == null)
+                return NotFound();
+
+            await CargarBuildsAsync(piso.IdBuild);
             return View(piso);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Piso piso)
         {
             if (ModelState.IsValid)
@@ -57,6 +80,7 @@ namespace HotelApp.W.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            await CargarBuildsAsync(piso.IdBuild);
             return View(piso);
         }
 
@@ -67,7 +91,8 @@ namespace HotelApp.W.Controllers
             if (piso == null)
                 return NotFound();
 
-            return View(piso);
+            ViewBag.Descripcion = $"el piso \"{piso.Nombre}\"";
+            return View("ConfirmDelete", id);
         }
 
         [HttpPost, ActionName("Delete")]

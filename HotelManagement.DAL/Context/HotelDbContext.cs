@@ -34,6 +34,22 @@ namespace HotelManagement.DAL.Context
             modelBuilder.Entity<Usuario>().ToTable("Usuario");
             modelBuilder.Entity<Build>().ToTable("Build");
             modelBuilder.Entity<Piso>().ToTable("Piso");
+
+            // Las propiedades se llaman "IdX" (no "Id" ni "XId"), por lo que EF Core
+            // no las detecta como clave primaria por convención: hay que declararlas.
+            modelBuilder.Entity<Cliente>().HasKey(c => c.IdCliente);
+            modelBuilder.Entity<Empleado>().HasKey(e => e.IdEmpleado);
+            modelBuilder.Entity<Habitacion>().HasKey(h => h.IdHabitacion);
+            modelBuilder.Entity<Reserva>().HasKey(r => r.IdReserva);
+            modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
+            modelBuilder.Entity<Build>().HasKey(b => b.IdBuild);
+            modelBuilder.Entity<Piso>().HasKey(p => p.IdPiso);
+
+            // Precisión explícita para los montos (evita truncamientos en SQL Server).
+            modelBuilder.Entity<Empleado>().Property(e => e.Salario).HasPrecision(18, 2);
+            modelBuilder.Entity<Habitacion>().Property(h => h.Precio).HasPrecision(18, 2);
+            modelBuilder.Entity<Habitacion>().Property(h => h.PrecioNoche).HasPrecision(18, 2);
+            modelBuilder.Entity<Reserva>().Property(r => r.Total).HasPrecision(18, 2);
         }
     }
 }

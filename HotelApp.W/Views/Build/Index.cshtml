@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HotelApp.W.Models.BuildViewModel>
+﻿@model IEnumerable<HotelManagement.Entities.Build>
 
 @{
     ViewData["Title"] = "Bloques";
@@ -47,6 +47,12 @@
                        asp-route-id="@item.IdBuild"
                        class="btn btn-info">
                         Detalles
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@item.IdBuild"
+                       class="btn btn-danger">
+                        Eliminar
                     </a>
 
                 </td>

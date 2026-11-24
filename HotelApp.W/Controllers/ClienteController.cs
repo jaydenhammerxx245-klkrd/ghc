@@ -5,7 +5,7 @@ namespace HotelApp.W.Controllers
 {
     public class ClienteController : Controller
     {
-        private static readonly List<ClienteViewModel> clientes = [new()];
+        private static readonly List<ClienteViewModel> clientes = [];
 
         public IActionResult Index()
         {
@@ -19,7 +19,7 @@ namespace HotelApp.W.Controllers
         [HttpPost]
         public IActionResult Create(ClienteViewModel cliente)
         {
-            cliente.IdCliente = clientes.Count + 1;
+            cliente.IdCliente = clientes.Count == 0 ? 1 : clientes.Max(c => c.IdCliente) + 1;
             clientes.Add(cliente);
 
             return RedirectToAction(nameof(Index));

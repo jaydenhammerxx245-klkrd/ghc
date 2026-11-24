@@ -12,9 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
                 // DbContext
+// "DatabaseProvider" = "Sqlite" usa un archivo local (no requiere instalar nada);
+// cualquier otro valor usa SQL Server con "DefaultConnection".
+var dbProvider = builder.Configuration["DatabaseProvider"] ?? "SqlServer";
 builder.Services.AddDbContext<HotelDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    if (dbProvider.Equals("Sqlite", StringComparison.OrdinalIgnoreCase))
+        options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
+    else
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
                 // DAl
 builder.Services.AddScoped<IEmpleadoDAL, EmpleadoRP>();
@@ -40,6 +47,12 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// El proyecto no tiene migraciones: crea la base de datos y sus tablas si no existen.
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<HotelDbContext>().Database.EnsureCreated();
+}
 
 
 if (!app.Environment.IsDevelopment())

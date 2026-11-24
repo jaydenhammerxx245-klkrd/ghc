@@ -72,5 +72,24 @@ namespace HotelApp.W.Controllers
 
             return View(usuario);
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var usuario = await _usuarioBL.ObtenerPorIdAsync(id);
+
+            if (usuario == null)
+                return NotFound();
+
+            ViewBag.Descripcion = $"el usuario \"{usuario.NombreUsuario}\"";
+            return View("ConfirmDelete", id);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _usuarioBL.EliminarAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

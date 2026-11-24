@@ -27,7 +27,7 @@ namespace HotelManagement.BL.Service
 
         public async Task AddAsync(Cliente cliente)
         {
-            cliente.IdCliente = clientes.Count + 1;
+            cliente.IdCliente = clientes.Count == 0 ? 1 : clientes.Max(c => c.IdCliente) + 1;
 
             clientes.Add(cliente);
 

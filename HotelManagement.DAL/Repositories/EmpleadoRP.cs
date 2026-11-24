@@ -23,7 +23,7 @@ namespace HotelManagement.DAL.Repositories
         {
             try
             {
-                empleado.IdEmpleado = empleados.Count + 1;
+                empleado.IdEmpleado = empleados.Count == 0 ? 1 : empleados.Max(e => e.IdEmpleado) + 1;
 
                 empleados.Add(empleado);
 

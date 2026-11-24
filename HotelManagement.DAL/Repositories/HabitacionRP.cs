@@ -38,7 +38,7 @@ namespace HotelManagement.DAL.Repositories
         {
             try
             {
-                habitacion.IdHabitacion = habitaciones.Count + 1;
+                habitacion.IdHabitacion = habitaciones.Count == 0 ? 1 : habitaciones.Max(h => h.IdHabitacion) + 1;
 
                 habitaciones.Add(habitacion);
 

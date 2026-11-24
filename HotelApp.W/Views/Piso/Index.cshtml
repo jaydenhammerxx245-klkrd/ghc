@@ -1,10 +1,16 @@
-﻿@model IEnumerable<HotelApp.W.Models.PisoViewModel>
+﻿@model IEnumerable<HotelManagement.Entities.Piso>
 
 @{
     ViewData["Title"] = "Pisos";
 }
 
 <h2>Listado de Pisos</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Nuevo Piso
+    </a>
+</p>
 
 <table class="table table-bordered">
 
@@ -13,6 +19,7 @@
             <th>Número Piso</th>
             <th>Nombre</th>
             <th>Bloque</th>
+            <th>Acciones</th>
         </tr>
     </thead>
 
@@ -24,9 +31,14 @@
                 <td>@item.NumeroPiso</td>
                 <td>@item.Nombre</td>
                 <td>@item.IdBuild</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.IdPiso">Ver</a> |
+                    <a asp-action="Edit" asp-route-id="@item.IdPiso">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdPiso">Eliminar</a>
+                </td>
             </tr>
         }
 
     </tbody>
 
-</table> 
+</table>

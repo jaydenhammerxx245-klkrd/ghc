@@ -77,7 +77,8 @@ namespace HotelApp.W.Controllers
             if (reserva == null)
                 return NotFound();
 
-            return View(reserva);
+            ViewBag.Descripcion = $"la reserva #{reserva.IdReserva}";
+            return View("ConfirmDelete", id);
         }
 
         [HttpPost, ActionName("Delete")]
