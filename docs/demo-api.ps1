@@ -1,4 +1,4 @@
-<#
+﻿<#
   Demostración de todos los endpoints de la API de Hotel Crown (útil para grabar el video).
 
   Uso (con la aplicación ya iniciada: cd HotelApp.W; dotnet run --launch-profile http):
