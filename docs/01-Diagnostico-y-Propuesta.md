@@ -16,7 +16,7 @@ Rama: `refactor/capa-api-y-desacoplamiento`
 | `HotelManagement.DAL/Repositories/ReservaRP.cs` y `Context/HotelDbContext.cs` | Es donde realmente se guarda la reserva (esperado). |
 | `HotelManagement.DAL/Interfaces/IReservaDAL.cs` | El contrato del repositorio vivía **dentro** de la capa de datos: cambiar la persistencia podía obligar a cambiar el contrato. |
 | `HotelManagement.BL/Service/ReservaBL.cs` y `HotelManagement.BL.csproj` | La lógica de negocio **referenciaba el proyecto DAL** (y con él Entity Framework y SQL Server). Cualquier cambio en la DAL obligaba a recompilar y volver a probar el negocio. |
-| `HotelApp.W/Program.cs` y cualquier prueba | Para crear un `ReservaBL` había que construir un `HotelDbContext`, es decir, una base de datos. |
+| `HotelApp.W/Program.cs` y cualquier prueba | Cualquier proyecto de pruebas del negocio arrastraba en compilación Entity Framework y SQL Server, y el contrato que había que simular (`IReservaDAL`) pertenecía a la capa de datos: las pruebas del negocio quedaban atadas a la persistencia. |
 
 **Después del refactor** solo cambia la DAL (y su registro en `Program.cs`): el negocio depende de una interfaz que él mismo define.
 
@@ -52,7 +52,7 @@ public async Task CrearAsync(Reserva reserva)
 }
 ```
 
-Prueba ejecutada sobre la API original: se aceptó una reserva con **salida antes de la entrada y total negativo**:
+Prueba ejecutada sobre la API **antes del refactor** (commit `f107cb3`: el código del equipo más únicamente los arreglos mínimos para que arrancara, como declarar las claves primarias; ninguna lógica de negocio cambiada). Se aceptó una reserva con **salida antes de la entrada y total negativo**:
 
 ```
 POST /api/ReservaApi  {"fechaEntrada":"2026-12-05","fechaSalida":"2026-12-01","total":-5}
@@ -115,6 +115,7 @@ La flecha **BL → DAL** es el problema: el negocio (política) depende del deta
 | B | **Proveedor EF InMemory** para las pruebas | Sin servidor SQL | Sigue dependiendo de EF; no es “sin base de datos”, solo otra base de datos; se comporta distinto a una relacional | Descartada |
 | C | **Arquitectura limpia completa** (proyectos Domain / Application / Infrastructure, modelos de persistencia separados del dominio y mapeadores) | Separación máxima | Renombrar y duplicar proyectos y modelos; mucho cambio para el equipo y el plazo; el beneficio extra no es necesario porque `Entities` ya no depende de EF (el mapeo está en el `DbContext` con Fluent API) | Descartada por costo |
 | D | **Inversión de dependencias (patrón Repositorio + puertos)**: el negocio define las interfaces de repositorio; la DAL las implementa; la Web compone | Elimina BL → DAL; reglas probables con repositorios falsos; conserva los proyectos, nombres de clases y esquema existentes | Requiere que la Web referencie la DAL para registrar implementaciones (es su papel de raíz de composición) | **Elegida** |
+| E | **Proyecto de contratos aparte** (`HotelManagement.BL.Contracts` con solo las interfaces de repositorio) | La DAL no vería los servicios de negocio, solo los contratos | Un proyecto más; para el tamaño actual no aporta una separación adicional verificable, y puede extraerse después sin tocar el negocio | Descartada por ahora (evolución natural de D) |
 
 ### Por qué D
 
@@ -136,18 +137,21 @@ La flecha **BL → DAL** es el problema: el negocio (política) depende del deta
 | `HotelManagement.DAL` (datos) | `HotelDbContext`, `RepositorioBase<T>` (EF) y `ReservaRP`, `ClienteRP`… que **implementan** los contratos de BL | BL, Entities, EF Core |
 | `HotelApp.W` (presentación) | MVC + API; `Program.cs` registra qué implementación usa cada contrato | BL, DAL, Entities |
 | `HotelManagement.Tests` | Reglas de negocio con repositorios en memoria | **Solo BL y Entities** |
-| `HotelManagement.IntegrationTests` | Compatibilidad del esquema y flujo con repositorios reales | DAL, BL, Entities |
+| `HotelManagement.IntegrationTests` | Compatibilidad del esquema, flujo con repositorios reales y API por HTTP | DAL, BL, Entities, HotelApp.W |
 
 ### 4.2 Reglas de negocio del flujo de reservas (`ReservaBL` + entidad `Reserva`)
 
-1. Cliente y habitación con id válido.
+1. Cliente y habitación con id válido, y fechas de entrada y salida indicadas.
 2. La fecha de salida debe ser posterior a la de entrada (al menos una noche).
 3. El cliente debe existir.
-4. La habitación debe existir y estar **disponible**.
+4. La habitación debe existir y estar **disponible** (al crear o al cambiar de habitación; una reserva ya hecha puede seguir editándose aunque su habitación pase a no disponible).
 5. La habitación no puede tener otra reserva que **se cruce en fechas** (salir y entrar el mismo día sí se permite).
-6. El **total se calcula** como noches × precio por noche (ya no se confía en el valor enviado).
+6. El **total se calcula** como noches × precio por noche (ya no se confía en el valor enviado); el precio debe ser mayor que cero.
+7. **Integridad:** no se puede eliminar un cliente ni una habitación que tengan reservas (quedarían huérfanas, porque el esquema no tiene claves foráneas).
 
-Si una regla se viola se lanza `ReglaNegocioException`; la API responde **422** con el motivo y las pantallas MVC lo muestran en el formulario.
+Si una regla se viola se lanza `ReglaNegocioException`; la API responde **422** (o **409** al intentar eliminar) con el motivo, y las pantallas MVC lo muestran en el formulario.
+
+Además, las entidades declaran sus **validaciones de datos** (`[Required]`, `[Range]`, `[EmailAddress]`, con mensajes en español): campos obligatorios, capacidad 1–50, precio mayor que cero, correo válido, etc. Son anotaciones estándar de .NET, no dependen de ninguna base de datos y no alteran el esquema.
 
 ### 4.3 Dependencias DESPUÉS del refactor
 
@@ -170,6 +174,7 @@ flowchart TB
     T --> BL
     T --> E
     IT --> DAL
+    IT -- "pruebas HTTP" --> W
 
     style BL fill:#e3f4e8,stroke:#1e8449
     style E fill:#e3f4e8,stroke:#1e8449
@@ -186,9 +191,17 @@ Ninguna flecha sale de BL o Entities hacia la DAL o EF. Esto se comprueba autom�
 | `Total` lo enviaba el cliente | `Total` = noches × precio por noche | Regla de negocio; evita totales falsos |
 | Clientes, empleados y habitaciones en memoria | Se guardan en sus tablas (`Cliente`, `Empleado`, `Habitaciones`), que ya existían en el esquema | Usar los repositorios de forma uniforme |
 | `PUT`/`DELETE` de un id inexistente: 500 o “eliminado correctamente” | 404 | Corrección de la API |
+| Se aceptaban registros vacíos o con valores absurdos (precio negativo) | 400 con el detalle de cada campo | Validaciones del dominio |
+| Se podía borrar un cliente o una habitación con reservas | 409 y no se borra | Regla de integridad |
 
 El **esquema de base de datos no cambia**: el script SQL Server generado tras el refactor es idéntico, línea por línea, al de antes (ver evidencias).
 
 ### 4.5 Supuesto sobre el esquema “actual”
 
-Se toma como esquema actual el que define `HotelDbContext` (tabla `Reservas` con `Total`), porque es el que usa la aplicación en ejecución. Las consultas manuales de `DATSQL/` no se usan en ninguna parte del sistema y describen un esquema distinto; se dejaron sin cambios y se documentan como deuda técnica.
+Se toma como esquema actual el que define `HotelDbContext` (tabla `Reservas` con `Total`), porque es el que usa la aplicación en ejecución. Las consultas manuales de `DATSQL/` no se usaban en ninguna parte del sistema, describían un esquema distinto y fijaban la cadena de conexión en el código: **se eliminaron** en el refactor para que exista una sola definición del esquema.
+
+### 4.6 Limitaciones conocidas (fuera del alcance de la práctica)
+
+- **Concurrencia:** la comprobación de solapamiento y la inserción no son una operación atómica; dos reservas simultáneas idénticas podrían pasar ambas. Resolverlo exige una transacción serializable o una restricción en la base, lo que cambiaría el esquema que la práctica pide conservar.
+- **Fechas:** se tratan como fechas de calendario (sin hora ni zona horaria); se aceptan reservas en fechas pasadas, como en el sistema original.
+- **Seguridad:** el inicio de sesión de ejemplo (`AccountController`) y el almacenamiento de la clave en texto plano venían del proyecto original y no forman parte de esta práctica.

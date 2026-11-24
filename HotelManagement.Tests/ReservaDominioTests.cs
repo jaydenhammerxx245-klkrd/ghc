@@ -1,4 +1,4 @@
-using HotelManagement.Entities;
+﻿using HotelManagement.Entities;
 
 namespace HotelManagement.Tests
 {
@@ -37,7 +37,40 @@ namespace HotelManagement.Tests
         {
             var reserva = R(0, 1, "2026-12-01", "2026-12-02");
             reserva.IdCliente = 0;
-            Assert.Throws<ReglaNegocioException>(reserva.ValidarDatos);
+
+            var ex = Assert.Throws<ReglaNegocioException>(reserva.ValidarDatos);
+            Assert.Contains("cliente válido", ex.Message);
+        }
+
+        [Fact]
+        public void ValidarDatos_RechazaHabitacionInvalida()
+        {
+            var reserva = R(0, 1, "2026-12-01", "2026-12-02");
+            reserva.IdHabitacion = 0;
+
+            var ex = Assert.Throws<ReglaNegocioException>(reserva.ValidarDatos);
+            Assert.Contains("habitación válida", ex.Message);
+        }
+
+        [Fact]
+        public void ValidarDatos_AceptaUnaReservaCorrecta()
+        {
+            var ex = Record.Exception(R(0, 1, "2026-12-01", "2026-12-02").ValidarDatos);
+            Assert.Null(ex);
+        }
+
+        [Fact]
+        public void SeSolapaCon_DetectaUnaReservaQueEnvuelveAOtra()
+        {
+            var existente = R(1, 1, "2026-12-03", "2026-12-04");
+            Assert.True(R(0, 1, "2026-12-01", "2026-12-10").SeSolapaCon(existente));
+        }
+
+        [Fact]
+        public void SeSolapaCon_IgnoraLaMismaReserva()
+        {
+            var reserva = R(7, 1, "2026-12-01", "2026-12-05");
+            Assert.False(reserva.SeSolapaCon(R(7, 1, "2026-12-01", "2026-12-05")));
         }
 
         [Fact]

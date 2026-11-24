@@ -58,5 +58,8 @@ namespace HotelManagement.Tests.Fakes
     {
         public Task<List<Reserva>> ObtenerPorHabitacionAsync(int idHabitacion) =>
             Task.FromResult(Datos.Where(r => r.IdHabitacion == idHabitacion).ToList());
+
+        public Task<List<Reserva>> ObtenerPorClienteAsync(int idCliente) =>
+            Task.FromResult(Datos.Where(r => r.IdCliente == idCliente).ToList());
     }
 }

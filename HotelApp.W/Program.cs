@@ -42,7 +42,18 @@ builder.Services.AddScoped<IClienteBL, ClienteBL>();
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        // Respuesta 400 de validación con título en español (el detalle de cada campo viene de las entidades).
+        options.InvalidModelStateResponseFactory = contexto =>
+            new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(
+                new Microsoft.AspNetCore.Mvc.ValidationProblemDetails(contexto.ModelState)
+                {
+                    Title = "Uno o más datos no son válidos.",
+                    Status = StatusCodes.Status400BadRequest,
+                });
+    });
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Hotel Crown API", Version = "v1",
@@ -66,9 +77,9 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+    // En desarrollo la app corre solo por HTTP (perfil "http"); en producción se fuerza HTTPS.
+    app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -82,3 +93,6 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+
+// Permite que las pruebas de integración levanten la aplicación (WebApplicationFactory).
+public partial class Program { }

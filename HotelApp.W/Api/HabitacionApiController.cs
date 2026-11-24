@@ -62,13 +62,23 @@ namespace HotelApp.W.Controllers.Api
             return Ok(habitacion);
         }
 
-        /// <summary>Elimina un registro de habitaciones.</summary>
+        /// <summary>Elimina un registro (409 si tiene reservas) de habitaciones.</summary>
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Delete(int id)
         {
-            return await _habitacionBL.DeleteAsync(id) ? NoContent() : NotFound();
+            try
+            {
+                return await _habitacionBL.DeleteAsync(id) ? NoContent() : NotFound();
+            }
+            catch (ReglaNegocioException ex)
+            {
+                // No se puede borrar porque tiene reservas asociadas.
+                return Problem(title: "Regla de negocio violada", detail: ex.Message,
+                    statusCode: StatusCodes.Status409Conflict);
+            }
         }
     }
 }

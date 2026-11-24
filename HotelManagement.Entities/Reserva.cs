@@ -38,6 +38,9 @@
             if (IdHabitacion <= 0)
                 throw new ReglaNegocioException("La reserva debe indicar una habitación válida.");
 
+            if (FechaEntrada == default || FechaSalida == default)
+                throw new ReglaNegocioException("Debe indicar la fecha de entrada y la fecha de salida.");
+
             if (FechaSalida.Date <= FechaEntrada.Date)
                 throw new ReglaNegocioException("La fecha de salida debe ser posterior a la fecha de entrada.");
         }
@@ -45,6 +48,10 @@
         /// <summary>Calcula el total de la estadía según el precio por noche de la habitación.</summary>
         public void CalcularTotal(Habitacion habitacion)
         {
+            if (habitacion.PrecioNoche <= 0)
+                throw new ReglaNegocioException(
+                    $"La habitación {habitacion.Numero} no tiene un precio por noche válido.");
+
             Total = Noches * habitacion.PrecioNoche;
         }
     }

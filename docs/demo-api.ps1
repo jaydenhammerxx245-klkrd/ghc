@@ -62,6 +62,8 @@ Invoke-Paso "Piso: listar"                    GET    "/PisoApi"
 Invoke-Paso "Piso: obtener por id"            GET    "/PisoApi/1"
 Invoke-Paso "Piso: actualizar"                PUT    "/PisoApi/1"  '{"idPiso":1,"numeroPiso":1,"idBuild":1,"nombre":"Planta baja"}'
 Invoke-Paso "Piso: eliminar inexistente -> 404" DELETE "/PisoApi/99"
+Invoke-Paso "Piso: crear temporal"            POST   "/PisoApi"    '{"numeroPiso":2,"idBuild":1,"nombre":"Temporal"}'
+Invoke-Paso "Piso: eliminar -> 204"           DELETE "/PisoApi/2"
 
 # ---------- CLIENTE ----------
 Invoke-Paso "Cliente: crear"                  POST   "/ClienteApi" '{"nombre":"Luis","apellido":"Paz","cedula":"001-0000001-1","telefono":"809-555-0101","correo":"luis@example.com"}'
@@ -69,6 +71,9 @@ Invoke-Paso "Cliente: listar"                 GET    "/ClienteApi"
 Invoke-Paso "Cliente: obtener por id"         GET    "/ClienteApi/1"
 Invoke-Paso "Cliente: actualizar"             PUT    "/ClienteApi/1" '{"idCliente":1,"nombre":"Luis","apellido":"Paz","cedula":"001-0000001-1","telefono":"809-555-0199","correo":"luis@example.com"}'
 Invoke-Paso "Cliente: eliminar inexistente -> 404" DELETE "/ClienteApi/99"
+Invoke-Paso "Cliente: datos obligatorios faltantes -> 400" POST "/ClienteApi" '{}'
+Invoke-Paso "Cliente: crear temporal"         POST   "/ClienteApi" '{"nombre":"Temporal","apellido":"X","cedula":"9","telefono":"9","correo":"temporal@example.com"}'
+Invoke-Paso "Cliente: eliminar -> 204"        DELETE "/ClienteApi/2"
 
 # ---------- EMPLEADO ----------
 Invoke-Paso "Empleado: crear"                 POST   "/EmpleadoApi" '{"nombre":"Eva","apellido":"Ruiz","cedula":"002","telefono":"809-555-0202","cargo":"Recepcionista","salario":35000,"correo":"eva@example.com"}'
@@ -85,6 +90,9 @@ Invoke-Paso "Habitación: listar"              GET    "/HabitacionApi"
 Invoke-Paso "Habitación: obtener por id"      GET    "/HabitacionApi/1"
 Invoke-Paso "Habitación: actualizar"          PUT    "/HabitacionApi/1" '{"idHabitacion":1,"numero":"101","capacidad":3,"precioNoche":80,"disponible":true,"idPiso":1,"precio":80,"tipo":"Triple","estado":"Libre"}'
 Invoke-Paso "Habitación: eliminar inexistente -> 404" DELETE "/HabitacionApi/99"
+Invoke-Paso "Habitación: precio negativo -> 400" POST "/HabitacionApi" '{"numero":"999","capacidad":2,"precioNoche":-80,"disponible":true,"idPiso":1}'
+Invoke-Paso "Habitación: crear temporal"      POST   "/HabitacionApi" '{"numero":"103","capacidad":1,"precioNoche":50,"disponible":true,"idPiso":1,"precio":50,"tipo":"Sencilla","estado":"Libre"}'
+Invoke-Paso "Habitación: eliminar -> 204"     DELETE "/HabitacionApi/3"
 
 # ---------- USUARIO ----------
 Invoke-Paso "Usuario: crear"                  POST   "/UsuarioApi" '{"nombreUsuario":"admin","clave":"S3creta!","rol":"Administrador"}'
@@ -92,6 +100,8 @@ Invoke-Paso "Usuario: listar (sin clave)"     GET    "/UsuarioApi"
 Invoke-Paso "Usuario: obtener por id"         GET    "/UsuarioApi/1"
 Invoke-Paso "Usuario: actualizar"             PUT    "/UsuarioApi/1" '{"idUsuario":1,"nombreUsuario":"admin","clave":"Nueva!","rol":"Supervisor"}'
 Invoke-Paso "Usuario: eliminar inexistente -> 404" DELETE "/UsuarioApi/99"
+Invoke-Paso "Usuario: crear temporal"         POST   "/UsuarioApi" '{"nombreUsuario":"temporal","clave":"x","rol":"Invitado"}'
+Invoke-Paso "Usuario: eliminar -> 204"        DELETE "/UsuarioApi/2"
 
 # ---------- RESERVA ----------
 Invoke-Paso "Reserva EXITOSA (3 noches x 80 = 240)"         POST "/ReservaApi" '{"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-01","fechaSalida":"2026-12-04"}'
@@ -99,6 +109,8 @@ Invoke-Paso "Reserva RECHAZADA: fechas se solapan -> 422"   POST "/ReservaApi" '
 Invoke-Paso "Reserva RECHAZADA: salida antes de entrada"    POST "/ReservaApi" '{"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-10","fechaSalida":"2026-12-08"}'
 Invoke-Paso "Reserva RECHAZADA: habitación no disponible"   POST "/ReservaApi" '{"idCliente":1,"idHabitacion":2,"fechaEntrada":"2026-12-10","fechaSalida":"2026-12-12"}'
 Invoke-Paso "Reserva RECHAZADA: cliente inexistente"        POST "/ReservaApi" '{"idCliente":99,"idHabitacion":1,"fechaEntrada":"2026-12-10","fechaSalida":"2026-12-12"}'
+Invoke-Paso "Cliente con reservas: no se puede eliminar -> 409"    DELETE "/ClienteApi/1"
+Invoke-Paso "Habitación con reservas: no se puede eliminar -> 409" DELETE "/HabitacionApi/1"
 Invoke-Paso "Reserva: listar"                 GET    "/ReservaApi"
 Invoke-Paso "Reserva: obtener por id"         GET    "/ReservaApi/1"
 Invoke-Paso "Reserva: actualizar (total -> 400)" PUT "/ReservaApi/1" '{"idReserva":1,"idCliente":1,"idHabitacion":1,"fechaEntrada":"2026-12-01","fechaSalida":"2026-12-06"}'

@@ -1,28 +1,14 @@
 ﻿@model HotelManagement.Entities.Habitacion
+@{
+    ViewData["Title"] = "Crear Habitación";
+}
 
 <h2>Crear Habitación</h2>
 
 <form asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="Numero"></label>
-        <input asp-for="Numero" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Capacidad"></label>
-        <input asp-for="Capacidad" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="PrecioNoche"></label>
-        <input asp-for="PrecioNoche" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Disponible"></label>
-        <input asp-for="Disponible" type="checkbox" />
-    </div>
+    <partial name="_Campos" model="Model" />
 
     <button type="submit" class="btn btn-success">
         Guardar
@@ -31,5 +17,4 @@
     <a asp-action="Index" class="btn btn-secondary">
         Volver
     </a>
-
 </form>

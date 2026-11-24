@@ -4,6 +4,8 @@
 
 <form asp-action="Create">
 
+    <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="mb-3">
         <label asp-for="Nombre"></label>
         <input asp-for="Nombre" class="form-control" />

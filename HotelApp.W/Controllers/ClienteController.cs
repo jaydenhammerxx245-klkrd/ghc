@@ -73,7 +73,15 @@ namespace HotelApp.W.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _clienteBL.DeleteAsync(id);
+            try
+            {
+                await _clienteBL.DeleteAsync(id);
+            }
+            catch (ReglaNegocioException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

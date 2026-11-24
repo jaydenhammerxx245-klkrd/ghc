@@ -17,5 +17,12 @@ namespace HotelManagement.DAL.Repositories
                 .Where(r => r.IdHabitacion == idHabitacion)
                 .ToListAsync();
         }
+
+        public Task<List<Reserva>> ObtenerPorClienteAsync(int idCliente)
+        {
+            return Set.AsNoTracking()
+                .Where(r => r.IdCliente == idCliente)
+                .ToListAsync();
+        }
     }
 }

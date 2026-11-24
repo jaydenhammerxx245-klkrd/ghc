@@ -37,3 +37,4 @@ HotelManagement.IntegrationTests ->
     [proyecto] HotelManagement.DAL
     [proyecto] HotelManagement.BL
     [proyecto] HotelManagement.Entities
+    [proyecto] HotelApp.W

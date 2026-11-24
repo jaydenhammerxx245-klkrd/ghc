@@ -1,30 +1,16 @@
 ﻿@model HotelManagement.Entities.Habitacion
+@{
+    ViewData["Title"] = "Editar Habitación";
+}
 
 <h2>Editar Habitación</h2>
 
 <form asp-action="Edit">
+    <div asp-validation-summary="All" class="text-danger"></div>
 
     <input type="hidden" asp-for="IdHabitacion" />
 
-    <div class="mb-3">
-        <label asp-for="Numero"></label>
-        <input asp-for="Numero" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Capacidad"></label>
-        <input asp-for="Capacidad" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="PrecioNoche"></label>
-        <input asp-for="PrecioNoche" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Disponible"></label>
-        <input asp-for="Disponible" type="checkbox" />
-    </div>
+    <partial name="_Campos" model="Model" />
 
     <button type="submit" class="btn btn-warning">
         Actualizar
@@ -33,5 +19,4 @@
     <a asp-action="Index" class="btn btn-secondary">
         Volver
     </a>
-
 </form>

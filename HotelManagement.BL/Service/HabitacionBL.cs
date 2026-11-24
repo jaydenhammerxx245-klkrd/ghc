@@ -7,10 +7,12 @@ namespace HotelManagement.BL.Services
     public class HabitacionBL : IHabitacionBL
     {
         private readonly IHabitacionRepositorio _repositorio;
+        private readonly IReservaRepositorio _reservas;
 
-        public HabitacionBL(IHabitacionRepositorio repositorio)
+        public HabitacionBL(IHabitacionRepositorio repositorio, IReservaRepositorio reservas)
         {
             _repositorio = repositorio;
+            _reservas = reservas;
         }
 
         public Task<List<Habitacion>> GetAllAsync() => _repositorio.ObtenerTodosAsync();
@@ -21,6 +23,21 @@ namespace HotelManagement.BL.Services
 
         public Task<bool> UpdateAsync(Habitacion habitacion) => _repositorio.ActualizarAsync(habitacion.IdHabitacion, habitacion);
 
-        public Task<bool> DeleteAsync(int id) => _repositorio.EliminarAsync(id);
+        /// <summary>
+        /// Elimina una habitación. Regla de negocio: no se puede eliminar una habitación que tiene reservas.
+        /// </summary>
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var habitacion = await _repositorio.ObtenerPorIdAsync(id);
+            if (habitacion == null)
+                return false;
+
+            var reservas = await _reservas.ObtenerPorHabitacionAsync(id);
+            if (reservas.Count > 0)
+                throw new ReglaNegocioException(
+                    $"No se puede eliminar la habitación {habitacion.Numero}: tiene {reservas.Count} reserva(s).");
+
+            return await _repositorio.EliminarAsync(id);
+        }
     }
 }

@@ -1,28 +1,68 @@
-Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-12-02", salida: "2026-12-03", habitacion: 2, esperado: False) [132 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.ActualizarReservaInexistente_DevuelveFalse [134 ms]
-Passed HotelManagement.Tests.ArquitecturaTests.CapaNoDependeDePersistencia(tipoDeLaCapa: typeof(HotelManagement.Entities.Reserva)) [132 ms]
-Passed HotelManagement.Tests.ArquitecturaTests.CapaNoDependeDePersistencia(tipoDeLaCapa: typeof(HotelManagement.BL.Services.ReservaBL)) [< 1 ms]
-Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-12-05", salida: "2026-12-08", habitacion: 1, esperado: False) [< 1 ms]
-Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-12-02", salida: "2026-12-03", habitacion: 1, esperado: True) [< 1 ms]
-Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-11-28", salida: "2026-12-01", habitacion: 1, esperado: False) [< 1 ms]
-Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-11-28", salida: "2026-12-02", habitacion: 1, esperado: True) [< 1 ms]
-Passed HotelManagement.Tests.ReservaDominioTests.CalcularTotal_UsaElPrecioPorNoche [3 ms]
-Passed HotelManagement.Tests.ReservaDominioTests.Noches_SeCalculanPorFecha [2 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.ClienteInexistente_SeRechaza [6 ms]
-Passed HotelManagement.Tests.ReservaDominioTests.ValidarDatos_RechazaClienteInvalido [< 1 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.ReservaQueEmpiezaElDiaDeSalidaDeOtra_SePermite [1 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.ActualizarUnaReserva_NoChocaConsigoMisma_YRecalculaTotal [< 1 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.ReservaQueSeSolapa_SeRechaza [14 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.HabitacionInexistente_SeRechaza [< 1 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.ElTotalEnviadoPorElCliente_SeIgnora [< 1 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.FechasInvalidas_SeRechazan(entrada: "2026-12-05", salida: "2026-12-05") [< 1 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.FechasInvalidas_SeRechazan(entrada: "2026-12-05", salida: "2026-12-01") [< 1 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.HabitacionNoDisponible_SeRechaza [< 1 ms]
-Passed HotelManagement.Tests.ReglasReservaTests.ReservaValida_SeGuarda_YCalculaElTotal [< 1 ms]
-Total tests: 21
-Passed HotelManagement.IntegrationTests.CompatibilidadEsquemaTests.TablaReservas_ConservaSusColumnas [862 ms]
-Passed HotelManagement.IntegrationTests.CompatibilidadEsquemaTests.EsquemaSqlServer_EsIdenticoAlDeAntesDelRefactor [22 ms]
-Passed HotelManagement.IntegrationTests.FlujoReservaConBaseDeDatosTests.ReservaSolapada_SeRechaza_YNoSeGuarda [1 s]
-Passed HotelManagement.IntegrationTests.FlujoReservaConBaseDeDatosTests.ReservaValida_SeGuardaEnLaTablaReservas [23 ms]
-Passed HotelManagement.IntegrationTests.FlujoReservaConBaseDeDatosTests.Actualizar_YEliminar_UsanLosRepositoriosReales [87 ms]
-Total tests: 5
+Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-12-02", salida: "2026-12-03", habitacion: 2, esperado: False)
+Passed HotelManagement.Tests.ReglasReservaTests.ActualizarReservaInexistente_DevuelveFalse
+Passed HotelManagement.Tests.ValidacionEntidadesTests.ClienteVacio_NoEsValido
+Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-12-05", salida: "2026-12-08", habitacion: 1, esperado: False)
+Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-12-02", salida: "2026-12-03", habitacion: 1, esperado: True)
+Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-11-28", salida: "2026-12-01", habitacion: 1, esperado: False)
+Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon(entrada: "2026-11-28", salida: "2026-12-02", habitacion: 1, esperado: True)
+Passed HotelManagement.Tests.ServiciosCrudTests.ClienteBL_CrudCompleto
+Passed HotelManagement.Tests.ServiciosCrudTests.ClienteConReservas_NoSePuedeEliminar
+Passed HotelManagement.Tests.ReservaDominioTests.CalcularTotal_UsaElPrecioPorNoche
+Passed HotelManagement.Tests.ReglasReservaTests.ClienteInexistente_SeRechaza
+Passed HotelManagement.Tests.ReglasReservaTests.ReservaQueEmpiezaElDiaDeSalidaDeOtra_SePermite
+Passed HotelManagement.Tests.ReglasReservaTests.ActualizarUnaReserva_NoChocaConsigoMisma_YRecalculaTotal
+Passed HotelManagement.Tests.ServiciosCrudTests.HabitacionBL_CrudCompleto
+Passed HotelManagement.Tests.ReglasReservaTests.ListarObtenerYEliminar_DelegaEnElRepositorio
+Passed HotelManagement.Tests.ArquitecturaTests.ProyectoNoDeclaraDependenciasDePersistencia(proyecto: "HotelManagement.Entities")
+Passed HotelManagement.Tests.ServiciosCrudTests.HabitacionConReservas_NoSePuedeEliminar
+Passed HotelManagement.Tests.ReglasReservaTests.ReservaQueSeSolapa_SeRechaza
+Passed HotelManagement.Tests.ArquitecturaTests.ProyectoNoDeclaraDependenciasDePersistencia(proyecto: "HotelManagement.BL")
+Passed HotelManagement.Tests.ArquitecturaTests.ProyectoNoDeclaraDependenciasDePersistencia(proyecto: "HotelManagement.Tests")
+Passed HotelManagement.Tests.ReglasReservaTests.CambiarUnaReservaAHabitacionNoDisponible_SeRechaza
+Passed HotelManagement.Tests.ValidacionEntidadesTests.HabitacionConDatosInvalidos_NoEsValida(capacidad: 2, precio: 0, piso: 1, errorEsperado: "El precio por noche debe ser mayor que cero.")
+Passed HotelManagement.Tests.ReglasReservaTests.HabitacionInexistente_SeRechaza
+Passed HotelManagement.Tests.ValidacionEntidadesTests.HabitacionConDatosInvalidos_NoEsValida(capacidad: 2, precio: 80, piso: 0, errorEsperado: "Debe indicar el piso.")
+Passed HotelManagement.Tests.ReglasReservaTests.ReservaExistente_SePuedeEditar_AunqueSuHabitacionYaNoEsteDisponible
+Passed HotelManagement.Tests.ValidacionEntidadesTests.HabitacionConDatosInvalidos_NoEsValida(capacidad: 0, precio: 80, piso: 1, errorEsperado: "La capacidad debe estar entre 1 y 50 personas.")
+Passed HotelManagement.Tests.ValidacionEntidadesTests.HabitacionConDatosInvalidos_NoEsValida(capacidad: 2, precio: -80, piso: 1, errorEsperado: "El precio por noche debe ser mayor que cero.")
+Passed HotelManagement.Tests.ReglasReservaTests.ElTotalEnviadoPorElCliente_SeIgnora
+Passed HotelManagement.Tests.ValidacionEntidadesTests.ClienteCompleto_EsValido
+Passed HotelManagement.Tests.ReglasReservaTests.CambiarDeHabitacion_RecalculaElTotalConElNuevoPrecio
+Passed HotelManagement.Tests.ReglasReservaTests.HabitacionSinPrecioValido_SeRechaza
+Passed HotelManagement.Tests.ValidacionEntidadesTests.EmpleadoConSalarioNegativo_NoEsValido
+Passed HotelManagement.Tests.ValidacionEntidadesTests.ClienteConCorreoInvalido_NoEsValido
+Passed HotelManagement.Tests.ReglasReservaTests.ReservaSinFechas_SeRechaza
+Passed HotelManagement.Tests.ReservaDominioTests.ValidarDatos_RechazaHabitacionInvalida
+Passed HotelManagement.Tests.ValidacionEntidadesTests.UsuarioSinClave_NoEsValido
+Passed HotelManagement.Tests.ReservaDominioTests.ValidarDatos_AceptaUnaReservaCorrecta
+Passed HotelManagement.Tests.ReservaDominioTests.Noches_SeCalculanPorFecha
+Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon_DetectaUnaReservaQueEnvuelveAOtra
+Passed HotelManagement.Tests.ReservaDominioTests.ValidarDatos_RechazaClienteInvalido
+Passed HotelManagement.Tests.ReservaDominioTests.SeSolapaCon_IgnoraLaMismaReserva
+Passed HotelManagement.Tests.ReglasReservaTests.ActualizarConFechasQueChocanConOtraReserva_SeRechaza_YNoCambiaNada
+Passed HotelManagement.Tests.ArquitecturaTests.ControladoresNoUsanLaBaseDeDatosDirectamente
+Passed HotelManagement.Tests.ReglasReservaTests.FechasInvalidas_SeRechazan(entrada: "2026-12-05", salida: "2026-12-05")
+Passed HotelManagement.Tests.ReglasReservaTests.FechasInvalidas_SeRechazan(entrada: "2026-12-05", salida: "2026-12-01")
+Passed HotelManagement.Tests.ReglasReservaTests.HabitacionNoDisponible_SeRechaza
+Passed HotelManagement.Tests.ArquitecturaTests.EnsambladoNoReferenciaPersistencia(tipoDeLaCapa: typeof(HotelManagement.BL.Services.ReservaBL))
+Passed HotelManagement.Tests.ReglasReservaTests.ReservaValida_SeGuarda_YCalculaElTotal
+Passed HotelManagement.Tests.ArquitecturaTests.EnsambladoNoReferenciaPersistencia(tipoDeLaCapa: typeof(HotelManagement.Entities.Reserva))
+Passed HotelManagement.IntegrationTests.CompatibilidadEsquemaTests.TablaReservas_ConservaSusColumnas
+Passed HotelManagement.IntegrationTests.CompatibilidadEsquemaTests.EsquemaSqlServer_EsIdenticoAlDeAntesDelRefactor
+Passed HotelManagement.IntegrationTests.FlujoReservaConBaseDeDatosTests.ReservaSolapada_SeRechaza_YNoSeGuarda
+Passed HotelManagement.IntegrationTests.FlujoReservaConBaseDeDatosTests.ReservaValida_SeGuardaEnLaTablaReservas
+Passed HotelManagement.IntegrationTests.FlujoReservaConBaseDeDatosTests.Actualizar_YEliminar_UsanLosRepositoriosReales
+Passed HotelManagement.IntegrationTests.ApiHttpTests.BorrarClienteConReservas_Responde409_YNoLoBorra
+Passed HotelManagement.IntegrationTests.ApiHttpTests.ReservaQueViolaUnaRegla_Responde422_ConElMotivo(habitacion: 1, entrada: "2026-12-03", salida: "2026-12-06", motivo: "ya está reservada")
+Passed HotelManagement.IntegrationTests.ApiHttpTests.ReservaQueViolaUnaRegla_Responde422_ConElMotivo(habitacion: 1, entrada: "2026-12-10", salida: "2026-12-08", motivo: "fecha de salida")
+Passed HotelManagement.IntegrationTests.ApiHttpTests.ReservaQueViolaUnaRegla_Responde422_ConElMotivo(habitacion: 2, entrada: "2026-12-10", salida: "2026-12-12", motivo: "no está disponible")
+Passed HotelManagement.IntegrationTests.ApiHttpTests.DatosObligatoriosFaltantes_Responde400
+Passed HotelManagement.IntegrationTests.ApiHttpTests.IdInexistente_Responde404_EnGetPutYDelete
+Passed HotelManagement.IntegrationTests.ApiHttpTests.IdDeLaUrlDistintoAlDelCuerpo_Responde400
+Passed HotelManagement.IntegrationTests.ApiHttpTests.HabitacionConPrecioNegativo_Responde400
+Passed HotelManagement.IntegrationTests.ApiHttpTests.CrudCompleto_PorHttp
+Passed HotelManagement.IntegrationTests.ApiHttpTests.ReservaValida_Responde201_ConTotalCalculado
+Passed HotelManagement.IntegrationTests.ApiHttpTests.UsuarioApi_NuncaDevuelveLaClave
+
+Passed!  - Failed:     0, Passed:    49, Skipped:     0, Total:    49 - HotelManagement.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:    16, Skipped:     0, Total:    16 - HotelManagement.IntegrationTests.dll (net10.0)

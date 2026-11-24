@@ -1,16 +1,26 @@
-﻿using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HotelApp.W.Controllers
 {
     public class HabitacionController : Controller
     {
         private readonly IHabitacionBL _habitacionBL;
+        private readonly IPisoBL _pisoBL;
 
-        public HabitacionController(IHabitacionBL habitacionBL)
+        public HabitacionController(IHabitacionBL habitacionBL, IPisoBL pisoBL)
         {
             _habitacionBL = habitacionBL;
+            _pisoBL = pisoBL;
+        }
+
+        // Llena el desplegable de pisos de los formularios Crear/Editar.
+        private async Task CargarPisosAsync(int? seleccionado = null)
+        {
+            var pisos = await _pisoBL.ObtenerTodosAsync();
+            ViewBag.Pisos = new SelectList(pisos, nameof(Piso.IdPiso), nameof(Piso.Nombre), seleccionado);
         }
 
         public async Task<IActionResult> Index()
@@ -29,9 +39,10 @@ namespace HotelApp.W.Controllers
             return View(habitacion);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            await CargarPisosAsync();
+            return View(new Habitacion { Disponible = true, Capacidad = 1 });
         }
 
         [HttpPost]
@@ -44,6 +55,7 @@ namespace HotelApp.W.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            await CargarPisosAsync(habitacion.IdPiso);
             return View(habitacion);
         }
 
@@ -54,6 +66,7 @@ namespace HotelApp.W.Controllers
             if (habitacion == null)
                 return NotFound();
 
+            await CargarPisosAsync(habitacion.IdPiso);
             return View(habitacion);
         }
 
@@ -63,10 +76,13 @@ namespace HotelApp.W.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _habitacionBL.UpdateAsync(habitacion);
+                if (!await _habitacionBL.UpdateAsync(habitacion))
+                    return NotFound();
+
                 return RedirectToAction(nameof(Index));
             }
 
+            await CargarPisosAsync(habitacion.IdPiso);
             return View(habitacion);
         }
 
@@ -85,7 +101,15 @@ namespace HotelApp.W.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _habitacionBL.DeleteAsync(id);
+            try
+            {
+                await _habitacionBL.DeleteAsync(id);
+            }
+            catch (ReglaNegocioException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }
