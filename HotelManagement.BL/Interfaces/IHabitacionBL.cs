@@ -7,7 +7,7 @@ namespace HotelManagement.BL.Interfaces
         Task<List<Habitacion>> GetAllAsync();
         Task<Habitacion?> GetByIdAsync(int id);
         Task AddAsync(Habitacion habitacion);
-        Task UpdateAsync(Habitacion habitacion);
-        Task DeleteAsync(int id);
+        Task<bool> UpdateAsync(Habitacion habitacion);
+        Task<bool> DeleteAsync(int id);
     }
 }

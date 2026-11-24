@@ -1,41 +1,26 @@
-﻿using HotelManagement.BL.Interfaces;
-using HotelManagement.DAL.Interfaces;
+using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Repositorios;
 using HotelManagement.Entities;
 
 namespace HotelManagement.BL.Services
 {
     public class UsuarioBL : IUsuarioBL
     {
-        private readonly IUsuarioDAL _usuarioDAL;
+        private readonly IUsuarioRepositorio _repositorio;
 
-        public UsuarioBL(IUsuarioDAL usuarioDAL)
+        public UsuarioBL(IUsuarioRepositorio repositorio)
         {
-            _usuarioDAL = usuarioDAL;
+            _repositorio = repositorio;
         }
 
-        public async Task<List<Usuario>> ObtenerTodosAsync()
-        {
-            return await _usuarioDAL.ObtenerTodosAsync();
-        }
+        public Task<List<Usuario>> ObtenerTodosAsync() => _repositorio.ObtenerTodosAsync();
 
-        public async Task<Usuario?> ObtenerPorIdAsync(int id)
-        {
-            return await _usuarioDAL.ObtenerPorIdAsync(id);
-        }
+        public Task<Usuario?> ObtenerPorIdAsync(int id) => _repositorio.ObtenerPorIdAsync(id);
 
-        public async Task CrearAsync(Usuario usuario)
-        {
-            await _usuarioDAL.CrearAsync(usuario);
-        }
+        public Task CrearAsync(Usuario usuario) => _repositorio.AgregarAsync(usuario);
 
-        public async Task ActualizarAsync(Usuario usuario)
-        {
-            await _usuarioDAL.ActualizarAsync(usuario);
-        }
+        public Task<bool> ActualizarAsync(Usuario usuario) => _repositorio.ActualizarAsync(usuario.IdUsuario, usuario);
 
-        public async Task EliminarAsync(int id)
-        {
-            await _usuarioDAL.EliminarAsync(id);
-        }
+        public Task<bool> EliminarAsync(int id) => _repositorio.EliminarAsync(id);
     }
 }

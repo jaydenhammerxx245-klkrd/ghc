@@ -1,8 +1,10 @@
-﻿@model HotelManagement.Entities.Reserva
+@model HotelManagement.Entities.Reserva
 
 <h2>Editar Reserva</h2>
 
 <form asp-action="Edit">
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
     <input type="hidden" asp-for="IdReserva" />
 
@@ -28,7 +30,8 @@
 
     <div class="mb-3">
         <label asp-for="Total"></label>
-        <input asp-for="Total" class="form-control" />
+        <input asp-for="Total" class="form-control" readonly />
+        <small class="text-muted">Se calcula automáticamente: noches × precio por noche.</small>
     </div>
 
     <button type="submit" class="btn btn-warning">

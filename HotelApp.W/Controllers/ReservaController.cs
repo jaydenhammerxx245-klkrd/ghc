@@ -1,4 +1,4 @@
-﻿using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,8 +40,16 @@ namespace HotelApp.W.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _reservaBL.CrearAsync(reserva);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _reservaBL.CrearAsync(reserva);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (ReglaNegocioException ex)
+                {
+                    // La regla de negocio rechazó la reserva: se muestra el motivo en el formulario.
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
             }
 
             return View(reserva);
@@ -63,8 +71,17 @@ namespace HotelApp.W.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _reservaBL.ActualizarAsync(reserva);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    if (!await _reservaBL.ActualizarAsync(reserva))
+                        return NotFound();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (ReglaNegocioException ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
             }
 
             return View(reserva);

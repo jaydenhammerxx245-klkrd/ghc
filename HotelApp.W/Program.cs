@@ -1,8 +1,7 @@
 using HotelManagement.BL.Interfaces;
-using HotelManagement.BL.Service;
 using HotelManagement.BL.Services;
 using HotelManagement.DAL.Context;
-using HotelManagement.DAL.Interfaces;
+using HotelManagement.BL.Repositorios;
 using HotelManagement.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
  
@@ -23,16 +22,16 @@ builder.Services.AddDbContext<HotelDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-                // DAl
-builder.Services.AddScoped<IEmpleadoDAL, EmpleadoRP>();
-builder.Services.AddScoped<IPisoDAL, PisoRP>();
-builder.Services.AddScoped<IBuildDAL, BuildRP>();
-builder.Services.AddScoped<IHabitacionDAL, HabitacionRP>();
-builder.Services.AddScoped<IReservaDAL, ReservaRP>();
-builder.Services.AddScoped<IUsuarioDAL, UsuarioRP>();
-builder.Services.AddScoped<IClienteDAL, ClienteRP>();
+// DAL: única parte de la app que conoce qué implementación concreta (EF) usa cada contrato.
+builder.Services.AddScoped<IEmpleadoRepositorio, EmpleadoRP>();
+builder.Services.AddScoped<IPisoRepositorio, PisoRP>();
+builder.Services.AddScoped<IBuildRepositorio, BuildRP>();
+builder.Services.AddScoped<IHabitacionRepositorio, HabitacionRP>();
+builder.Services.AddScoped<IReservaRepositorio, ReservaRP>();
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRP>();
+builder.Services.AddScoped<IClienteRepositorio, ClienteRP>();
 
-                // BL
+// BL
 builder.Services.AddScoped<IEmpleadoBL, EmpleadoBL>();
 builder.Services.AddScoped<IPisoBL, PisoBL>();
 builder.Services.AddScoped<IBuildBL, BuildBL>();

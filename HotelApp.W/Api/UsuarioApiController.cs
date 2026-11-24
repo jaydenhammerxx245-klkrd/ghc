@@ -1,11 +1,19 @@
-﻿using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelApp.W.Controllers.Api
 {
+    /// <summary>Datos de un usuario que devuelve la API (nunca incluye la clave).</summary>
+    public record UsuarioRespuesta(int IdUsuario, string NombreUsuario, string Rol)
+    {
+        public static UsuarioRespuesta Desde(Usuario u) => new(u.IdUsuario, u.NombreUsuario, u.Rol);
+    }
+
+    /// <summary>API REST de usuarios.</summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class UsuarioApiController : ControllerBase
     {
         private readonly IUsuarioBL _usuarioBL;
@@ -15,62 +23,59 @@ namespace HotelApp.W.Controllers.Api
             _usuarioBL = usuarioBL;
         }
 
-       
+        /// <summary>Lista todos los usuarios (sin la clave).</summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<UsuarioRespuesta>>> Get()
         {
             var usuarios = await _usuarioBL.ObtenerTodosAsync();
-            return Ok(usuarios);
+            return Ok(usuarios.Select(UsuarioRespuesta.Desde));
         }
 
-         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> Get(int id)
+        /// <summary>Obtiene un usuario por su id (sin la clave).</summary>
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UsuarioRespuesta>> GetById(int id)
         {
             var usuario = await _usuarioBL.ObtenerPorIdAsync(id);
-
-            if (usuario == null)
-                return NotFound();
-
-            return Ok(usuario);
+            return usuario == null ? NotFound() : Ok(UsuarioRespuesta.Desde(usuario));
         }
 
-        // POST: api/UsuarioApi
+        /// <summary>Crea un usuario.</summary>
         [HttpPost]
-        public async Task<IActionResult> Post(Usuario usuario)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UsuarioRespuesta>> Post(Usuario usuario)
         {
+            usuario.IdUsuario = 0;
             await _usuarioBL.CrearAsync(usuario);
-
-            return Ok(new
-            {
-                mensaje = "Usuario creado correctamente"
-            });
+            return CreatedAtAction(nameof(GetById), new { id = usuario.IdUsuario }, UsuarioRespuesta.Desde(usuario));
         }
 
-         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Usuario usuario)
+        /// <summary>Actualiza un usuario.</summary>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UsuarioRespuesta>> Put(int id, Usuario usuario)
         {
             if (id != usuario.IdUsuario)
-                return BadRequest();
+                return BadRequest(new { mensaje = "El id de la URL no coincide con el del cuerpo." });
 
-            await _usuarioBL.ActualizarAsync(usuario);
+            if (!await _usuarioBL.ActualizarAsync(usuario))
+                return NotFound();
 
-            return Ok(new
-            {
-                mensaje = "Usuario actualizado correctamente"
-            });
+            return Ok(UsuarioRespuesta.Desde(usuario));
         }
 
-         
-        [HttpDelete("{id}")]
+        /// <summary>Elimina un usuario.</summary>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            await _usuarioBL.EliminarAsync(id);
-
-            return Ok(new
-            {
-                mensaje = "Usuario eliminado correctamente"
-            });
+            return await _usuarioBL.EliminarAsync(id) ? NoContent() : NotFound();
         }
     }
 }

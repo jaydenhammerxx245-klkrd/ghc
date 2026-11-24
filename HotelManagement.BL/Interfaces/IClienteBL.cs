@@ -1,4 +1,3 @@
-﻿using HotelManagement.BL.Service;
 using HotelManagement.Entities;
 
 namespace HotelManagement.BL.Interfaces
@@ -11,9 +10,9 @@ namespace HotelManagement.BL.Interfaces
 
         Task AddAsync(Cliente cliente);
 
-        Task UpdateAsync(Cliente cliente);
+        Task<bool> UpdateAsync(Cliente cliente);
 
-        Task DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
     }
 
 

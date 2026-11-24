@@ -1,76 +1,80 @@
-﻿using HotelApp.W.Models;
+using HotelManagement.BL.Interfaces;
+using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelApp.W.Controllers
 {
     public class ClienteController : Controller
     {
-        private static readonly List<ClienteViewModel> clientes = [];
+        private readonly IClienteBL _clienteBL;
 
-        public IActionResult Index()
+        public ClienteController(IClienteBL clienteBL)
         {
-            return View(clientes);
+            _clienteBL = clienteBL;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            return View(await _clienteBL.GetAllAsync());
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var cliente = await _clienteBL.GetByIdAsync(id);
+            return cliente == null ? NotFound() : View(cliente);
         }
 
         public IActionResult Create()
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult Create(ClienteViewModel cliente)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Cliente cliente)
         {
-            cliente.IdCliente = clientes.Count == 0 ? 1 : clientes.Max(c => c.IdCliente) + 1;
-            clientes.Add(cliente);
+            if (!ModelState.IsValid)
+                return View(cliente);
+
+            await _clienteBL.AddAsync(cliente);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var cliente = await _clienteBL.GetByIdAsync(id);
+            return cliente == null ? NotFound() : View(cliente);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Cliente cliente)
+        {
+            if (!ModelState.IsValid)
+                return View(cliente);
+
+            if (!await _clienteBL.UpdateAsync(cliente))
+                return NotFound();
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var cliente = clientes.FirstOrDefault(c => c.IdCliente == id);
-
+            var cliente = await _clienteBL.GetByIdAsync(id);
             if (cliente == null)
                 return NotFound();
 
-            return View(cliente);
+            ViewBag.Descripcion = $"al cliente {cliente.Nombre} {cliente.Apellido}";
+            return View("ConfirmDelete", id);
         }
 
-        public IActionResult Edit(int id)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = clientes.FirstOrDefault(c => c.IdCliente == id);
-
-            if (cliente == null)
-                return NotFound();
-
-            return View(cliente);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(ClienteViewModel cliente)
-        {
-            var clienteActual = clientes.FirstOrDefault(c => c.IdCliente == cliente.IdCliente);
-
-            if (clienteActual != null)
-            {
-                clienteActual.Nombre = cliente.Nombre;
-                clienteActual.Apellido = cliente.Apellido;
-                clienteActual.Cedula = cliente.Cedula;
-                clienteActual.Telefono = cliente.Telefono;
-                clienteActual.Correo = cliente.Correo;
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public IActionResult Delete(int id)
-        {
-            var cliente = clientes.FirstOrDefault(c => c.IdCliente == id);
-
-            if (cliente != null)
-                clientes.Remove(cliente);
-
+            await _clienteBL.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }
 }
-

@@ -7,7 +7,7 @@ namespace HotelManagement.BL.Interfaces
         Task<List<Reserva>> ObtenerTodosAsync();
         Task<Reserva?> ObtenerPorIdAsync(int id);
         Task CrearAsync(Reserva reserva);
-        Task ActualizarAsync(Reserva reserva);
-        Task EliminarAsync(int id);
+        Task<bool> ActualizarAsync(Reserva reserva);
+        Task<bool> EliminarAsync(int id);
     }
 }

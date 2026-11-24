@@ -1,11 +1,13 @@
-﻿using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelApp.W.Controllers.Api
 {
+    /// <summary>API REST de empleados.</summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class EmpleadoApiController : ControllerBase
     {
         private readonly IEmpleadoBL _empleadoBL;
@@ -15,63 +17,58 @@ namespace HotelApp.W.Controllers.Api
             _empleadoBL = empleadoBL;
         }
 
-       
+        /// <summary>Lista todos los registros de empleados.</summary>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Empleado>>> Get()
         {
-            var empleados = await _empleadoBL.GetAllAsync();
-            return Ok(empleados);
+            return Ok(await _empleadoBL.GetAllAsync());
         }
 
-       
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Empleado>> Get(int id)
+        /// <summary>Obtiene un registro de empleados por su id.</summary>
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Empleado>> GetById(int id)
         {
             var empleado = await _empleadoBL.GetByIdAsync(id);
+            return empleado == null ? NotFound() : Ok(empleado);
+        }
 
-            if (empleado == null)
+        /// <summary>Crea un registro de empleados.</summary>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Empleado>> Post(Empleado empleado)
+        {
+            empleado.IdEmpleado = 0;
+            await _empleadoBL.AddAsync(empleado);
+            return CreatedAtAction(nameof(GetById), new { id = empleado.IdEmpleado }, empleado);
+        }
+
+        /// <summary>Actualiza un registro de empleados.</summary>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Empleado>> Put(int id, Empleado empleado)
+        {
+            if (id != empleado.IdEmpleado)
+                return BadRequest(new { mensaje = "El id de la URL no coincide con el del cuerpo." });
+
+            if (!await _empleadoBL.UpdateAsync(empleado))
                 return NotFound();
 
             return Ok(empleado);
         }
 
-         
-        [HttpPost]
-        public async Task<IActionResult> Post(Empleado empleado)
-        {
-            await _empleadoBL.AddAsync(empleado);
-
-            return Ok(new
-            {
-                mensaje = "Empleado creado correctamente"
-            });
-        }
-
-         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Empleado empleado)
-        {
-            if (id != empleado.IdEmpleado)
-                return BadRequest();
-
-            await _empleadoBL.UpdateAsync(empleado);
-
-            return Ok(new
-            {
-                mensaje = "Empleado actualizado correctamente"
-            });
-        }
-
-         
-        [HttpDelete("{id}")]
+        /// <summary>Elimina un registro de empleados.</summary>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            await _empleadoBL.DeleteAsync(id);
-
-            return Ok(new
-            {
-                mensaje = "Empleado eliminado correctamente"
-            });
+            return await _empleadoBL.DeleteAsync(id) ? NoContent() : NotFound();
         }
     }
 }

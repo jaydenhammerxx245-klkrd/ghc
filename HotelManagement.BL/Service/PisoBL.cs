@@ -1,41 +1,26 @@
-﻿using HotelManagement.BL.Interfaces;
-using HotelManagement.DAL.Interfaces;
+using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Repositorios;
 using HotelManagement.Entities;
 
 namespace HotelManagement.BL.Services
 {
     public class PisoBL : IPisoBL
     {
-        private readonly IPisoDAL _pisoDAL;
+        private readonly IPisoRepositorio _repositorio;
 
-        public PisoBL(IPisoDAL pisoDAL)
+        public PisoBL(IPisoRepositorio repositorio)
         {
-            _pisoDAL = pisoDAL;
+            _repositorio = repositorio;
         }
 
-        public async Task<List<Piso>> ObtenerTodosAsync()
-        {
-            return await _pisoDAL.ObtenerTodosAsync();
-        }
+        public Task<List<Piso>> ObtenerTodosAsync() => _repositorio.ObtenerTodosAsync();
 
-        public async Task<Piso?> ObtenerPorIdAsync(int id)
-        {
-            return await _pisoDAL.ObtenerPorIdAsync(id);
-        }
+        public Task<Piso?> ObtenerPorIdAsync(int id) => _repositorio.ObtenerPorIdAsync(id);
 
-        public async Task CrearAsync(Piso piso)
-        {
-            await _pisoDAL.CrearAsync(piso);
-        }
+        public Task CrearAsync(Piso piso) => _repositorio.AgregarAsync(piso);
 
-        public async Task ActualizarAsync(Piso piso)
-        {
-            await _pisoDAL.ActualizarAsync(piso);
-        }
+        public Task<bool> ActualizarAsync(Piso piso) => _repositorio.ActualizarAsync(piso.IdPiso, piso);
 
-        public async Task EliminarAsync(int id)
-        {
-            await _pisoDAL.EliminarAsync(id);
-        }
+        public Task<bool> EliminarAsync(int id) => _repositorio.EliminarAsync(id);
     }
 }

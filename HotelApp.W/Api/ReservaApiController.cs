@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotelApp.W.Controllers.Api
 {
+    /// <summary>API REST de reservas. Aplica las reglas de negocio de ReservaBL.</summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class ReservaApiController : ControllerBase
     {
         private readonly IReservaBL _reservaBL;
@@ -15,62 +17,84 @@ namespace HotelApp.W.Controllers.Api
             _reservaBL = reservaBL;
         }
 
-       
+        /// <summary>Lista todas las reservas.</summary>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Reserva>>> Get()
         {
-            var reservas = await _reservaBL.ObtenerTodosAsync();
-            return Ok(reservas);
+            return Ok(await _reservaBL.ObtenerTodosAsync());
         }
 
-         
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Reserva>> Get(int id)
+        /// <summary>Obtiene una reserva por su id.</summary>
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Reserva>> GetById(int id)
         {
             var reserva = await _reservaBL.ObtenerPorIdAsync(id);
-
-            if (reserva == null)
-                return NotFound();
-
-            return Ok(reserva);
+            return reserva == null ? NotFound() : Ok(reserva);
         }
 
-         [HttpPost]
-        public async Task<IActionResult> Post(Reserva reserva)
+        /// <summary>
+        /// Crea una reserva. El total se calcula automáticamente (noches × precio por noche).
+        /// Responde 422 si se viola una regla de negocio.
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async Task<ActionResult<Reserva>> Post(Reserva reserva)
         {
-            await _reservaBL.CrearAsync(reserva);
-
-            return Ok(new
+            try
             {
-                mensaje = "Reserva creada correctamente"
-            });
+                await _reservaBL.CrearAsync(reserva);
+                return CreatedAtAction(nameof(GetById), new { id = reserva.IdReserva }, reserva);
+            }
+            catch (ReglaNegocioException ex)
+            {
+                return ReglaViolada(ex);
+            }
         }
 
-         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Reserva reserva)
+        /// <summary>Actualiza una reserva. Responde 422 si se viola una regla de negocio.</summary>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public async Task<ActionResult<Reserva>> Put(int id, Reserva reserva)
         {
             if (id != reserva.IdReserva)
-                return BadRequest();
+                return BadRequest(new { mensaje = "El id de la URL no coincide con el del cuerpo." });
 
-            await _reservaBL.ActualizarAsync(reserva);
-
-            return Ok(new
+            try
             {
-                mensaje = "Reserva actualizada correctamente"
-            });
+                if (!await _reservaBL.ActualizarAsync(reserva))
+                    return NotFound();
+
+                return Ok(reserva);
+            }
+            catch (ReglaNegocioException ex)
+            {
+                return ReglaViolada(ex);
+            }
         }
 
-         
-        [HttpDelete("{id}")]
+        /// <summary>Elimina una reserva.</summary>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            await _reservaBL.EliminarAsync(id);
+            return await _reservaBL.EliminarAsync(id) ? NoContent() : NotFound();
+        }
 
-            return Ok(new
-            {
-                mensaje = "Reserva eliminada correctamente"
-            });
+        private ObjectResult ReglaViolada(ReglaNegocioException ex)
+        {
+            return Problem(
+                title: "Regla de negocio violada",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status422UnprocessableEntity);
         }
     }
 }

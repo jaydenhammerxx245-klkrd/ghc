@@ -11,7 +11,7 @@ namespace HotelManagement.BL.Interfaces
         Task<List<Build>> ObtenerTodosAsync();
         Task<Build?> ObtenerPorIdAsync(int id);
         Task CrearAsync(Build build);
-        Task ActualizarAsync(Build build);
-        Task EliminarAsync(int id);
+        Task<bool> ActualizarAsync(Build build);
+        Task<bool> EliminarAsync(int id);
     }
 }

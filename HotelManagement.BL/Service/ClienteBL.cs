@@ -1,68 +1,26 @@
-﻿using HotelManagement.BL.Interfaces;
-using HotelManagement.DAL.Interfaces;
+using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Repositorios;
 using HotelManagement.Entities;
 
-namespace HotelManagement.BL.Service
+namespace HotelManagement.BL.Services
 {
     public class ClienteBL : IClienteBL
     {
-        private static readonly List<Cliente> clientes = [];
-        private IClienteDAL _ClienteDAL;
+        private readonly IClienteRepositorio _repositorio;
 
-        public ClienteBL(IClienteDAL clienteDAL)
+        public ClienteBL(IClienteRepositorio repositorio)
         {
-            _ClienteDAL = clienteDAL;
-        }
-        public async Task<List<Cliente>> GetAllAsync()
-        {
-            return await Task.FromResult(clientes);
+            _repositorio = repositorio;
         }
 
-        public async Task<Cliente?> GetByIdAsync(int id)
-        {
-            return await Task.FromResult(
-                clientes.FirstOrDefault(c => c.IdCliente == id)
-            );
-        }
+        public Task<List<Cliente>> GetAllAsync() => _repositorio.ObtenerTodosAsync();
 
-        public async Task AddAsync(Cliente cliente)
-        {
-            cliente.IdCliente = clientes.Count == 0 ? 1 : clientes.Max(c => c.IdCliente) + 1;
+        public Task<Cliente?> GetByIdAsync(int id) => _repositorio.ObtenerPorIdAsync(id);
 
-            clientes.Add(cliente);
+        public Task AddAsync(Cliente cliente) => _repositorio.AgregarAsync(cliente);
 
-            await Task.CompletedTask;
-        }
+        public Task<bool> UpdateAsync(Cliente cliente) => _repositorio.ActualizarAsync(cliente.IdCliente, cliente);
 
-        public async Task UpdateAsync(Cliente cliente)
-        {
-            var clienteActual = clientes.FirstOrDefault(
-                c => c.IdCliente == cliente.IdCliente);
-
-            if (clienteActual != null)
-            {
-                clienteActual.Nombre = cliente.Nombre;
-                clienteActual.Apellido = cliente.Apellido;
-                clienteActual.Cedula = cliente.Cedula;
-                clienteActual.Telefono = cliente.Telefono;
-                clienteActual.Correo = cliente.Correo;
-            }
-
-            await Task.CompletedTask;
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var cliente = clientes.FirstOrDefault(
-                c => c.IdCliente == id);
-
-            if (cliente != null)
-            {
-                clientes.Remove(cliente);
-            }
-
-            await Task.CompletedTask;
-        }
-
+        public Task<bool> DeleteAsync(int id) => _repositorio.EliminarAsync(id);
     }
 }

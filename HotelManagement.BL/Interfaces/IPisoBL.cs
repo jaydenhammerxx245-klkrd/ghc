@@ -7,7 +7,7 @@ namespace HotelManagement.BL.Interfaces
         Task<List<Piso>> ObtenerTodosAsync();
         Task<Piso?> ObtenerPorIdAsync(int id);
         Task CrearAsync(Piso piso);
-        Task ActualizarAsync(Piso piso);
-        Task EliminarAsync(int id);
+        Task<bool> ActualizarAsync(Piso piso);
+        Task<bool> EliminarAsync(int id);
     }
 }

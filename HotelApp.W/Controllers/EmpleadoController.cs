@@ -1,83 +1,80 @@
-﻿using HotelApp.W.Models;
+using HotelManagement.BL.Interfaces;
+using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelApp.W.Controllers
 {
     public class EmpleadoController : Controller
     {
-        private static readonly List<EmpleadoViewModel> empleados = [];
+        private readonly IEmpleadoBL _empleadoBL;
 
-   
-        public IActionResult Index()
+        public EmpleadoController(IEmpleadoBL empleadoBL)
         {
-            return View(empleados);
+            _empleadoBL = empleadoBL;
         }
-         
+
+        public async Task<IActionResult> Index()
+        {
+            return View(await _empleadoBL.GetAllAsync());
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var empleado = await _empleadoBL.GetByIdAsync(id);
+            return empleado == null ? NotFound() : View(empleado);
+        }
+
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(EmpleadoViewModel empleado)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Empleado empleado)
         {
-            empleado.IdEmpleado = empleados.Count == 0 ? 1 : empleados.Max(e => e.IdEmpleado) + 1;
+            if (!ModelState.IsValid)
+                return View(empleado);
 
-            empleados.Add(empleado);
-
+            await _empleadoBL.AddAsync(empleado);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var empleado = empleados.FirstOrDefault(
-                e => e.IdEmpleado == id);
-
-            if (empleado == null)
-                return NotFound();
-
-            return View(empleado);
+            var empleado = await _empleadoBL.GetByIdAsync(id);
+            return empleado == null ? NotFound() : View(empleado);
         }
-        public IActionResult Details(int id)
-        {
-            var empleado = empleados.FirstOrDefault(
-                e => e.IdEmpleado == id);
 
-            if (empleado == null)
-                return NotFound();
-
-            return View(empleado);
-        }
         [HttpPost]
-        public IActionResult Edit(EmpleadoViewModel empleado)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Empleado empleado)
         {
-            var empleadoActual = empleados.FirstOrDefault(
-                e => e.IdEmpleado == empleado.IdEmpleado);
+            if (!ModelState.IsValid)
+                return View(empleado);
 
-            if (empleadoActual != null)
-            {
-                empleadoActual.Nombre = empleado.Nombre;
-                empleadoActual.Apellido = empleado.Apellido;
-                empleadoActual.Cedula = empleado.Cedula;
-                empleadoActual.Telefono = empleado.Telefono;
-                empleadoActual.Cargo = empleado.Cargo;
-                empleadoActual.Correo = empleado.Correo;
-                empleadoActual.Salario = empleado.Salario;
-            }
+            if (!await _empleadoBL.UpdateAsync(empleado))
+                return NotFound();
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var empleado = empleados.FirstOrDefault(
-                e => e.IdEmpleado == id);
+            var empleado = await _empleadoBL.GetByIdAsync(id);
+            if (empleado == null)
+                return NotFound();
 
-            if (empleado != null)
-                empleados.Remove(empleado);
-
-            return RedirectToAction(nameof(Index));
+            ViewBag.Descripcion = $"al empleado {empleado.Nombre} {empleado.Apellido}";
+            return View("ConfirmDelete", id);
         }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _empleadoBL.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

@@ -13,5 +13,39 @@
         public DateTime FechaSalida { get; set; }
 
         public decimal Total { get; set; }
+
+        // ----- Reglas de negocio propias de la reserva -----
+        // No dependen de ninguna base de datos: se pueden probar con objetos en memoria.
+
+        /// <summary>Cantidad de noches entre la fecha de entrada y la de salida.</summary>
+        public int Noches => (FechaSalida.Date - FechaEntrada.Date).Days;
+
+        /// <summary>Indica si esta reserva se cruza en fechas con otra de la misma habitación.</summary>
+        public bool SeSolapaCon(Reserva otra)
+        {
+            return otra.IdHabitacion == IdHabitacion
+                && otra.IdReserva != IdReserva
+                && FechaEntrada.Date < otra.FechaSalida.Date
+                && otra.FechaEntrada.Date < FechaSalida.Date;
+        }
+
+        /// <summary>Valida los datos propios de la reserva.</summary>
+        public void ValidarDatos()
+        {
+            if (IdCliente <= 0)
+                throw new ReglaNegocioException("La reserva debe indicar un cliente válido.");
+
+            if (IdHabitacion <= 0)
+                throw new ReglaNegocioException("La reserva debe indicar una habitación válida.");
+
+            if (FechaSalida.Date <= FechaEntrada.Date)
+                throw new ReglaNegocioException("La fecha de salida debe ser posterior a la fecha de entrada.");
+        }
+
+        /// <summary>Calcula el total de la estadía según el precio por noche de la habitación.</summary>
+        public void CalcularTotal(Habitacion habitacion)
+        {
+            Total = Noches * habitacion.PrecioNoche;
+        }
     }
 }

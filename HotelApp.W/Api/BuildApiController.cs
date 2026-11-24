@@ -1,12 +1,13 @@
-﻿using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace HotelApp.W.Controllers.Api
 {
+    /// <summary>API REST de edificios (Build).</summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class BuildApiController : ControllerBase
     {
         private readonly IBuildBL _buildBL;
@@ -16,63 +17,58 @@ namespace HotelApp.W.Controllers.Api
             _buildBL = buildBL;
         }
 
-         
+        /// <summary>Lista todos los registros de edificios (Build).</summary>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Build>>> Get()
         {
-            var builds = await _buildBL.ObtenerTodosAsync();
-            return Ok(builds);
+            return Ok(await _buildBL.ObtenerTodosAsync());
         }
 
-         
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Build>> Get(int id)
+        /// <summary>Obtiene un registro de edificios (Build) por su id.</summary>
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Build>> GetById(int id)
         {
             var build = await _buildBL.ObtenerPorIdAsync(id);
+            return build == null ? NotFound() : Ok(build);
+        }
 
-            if (build == null)
+        /// <summary>Crea un registro de edificios (Build).</summary>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Build>> Post(Build build)
+        {
+            build.IdBuild = 0;
+            await _buildBL.CrearAsync(build);
+            return CreatedAtAction(nameof(GetById), new { id = build.IdBuild }, build);
+        }
+
+        /// <summary>Actualiza un registro de edificios (Build).</summary>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Build>> Put(int id, Build build)
+        {
+            if (id != build.IdBuild)
+                return BadRequest(new { mensaje = "El id de la URL no coincide con el del cuerpo." });
+
+            if (!await _buildBL.ActualizarAsync(build))
                 return NotFound();
 
             return Ok(build);
         }
 
-        
-        [HttpPost]
-        public async Task<IActionResult> Post(Build build)
-        {
-            await _buildBL.CrearAsync(build);
-
-            return Ok(new
-            {
-                mensaje = "Build creado correctamente"
-            });
-        }
-
-         
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Build build)
-        {
-            if (id != build.IdBuild)
-                return BadRequest();
-
-            await _buildBL.ActualizarAsync(build);
-
-            return Ok(new
-            {
-                mensaje = "Build actualizado correctamente"
-            });
-        }
-
-         
-        [HttpDelete("{id}")]
+        /// <summary>Elimina un registro de edificios (Build).</summary>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            await _buildBL.EliminarAsync(id);
-
-            return Ok(new
-            {
-                mensaje = "Build eliminado correctamente"
-            });
+            return await _buildBL.EliminarAsync(id) ? NoContent() : NotFound();
         }
     }
 }

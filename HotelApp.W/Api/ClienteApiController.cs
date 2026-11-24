@@ -1,11 +1,13 @@
-﻿using HotelManagement.BL.Interfaces;
+using HotelManagement.BL.Interfaces;
 using HotelManagement.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelApp.W.Controllers.Api
 {
+    /// <summary>API REST de clientes.</summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class ClienteApiController : ControllerBase
     {
         private readonly IClienteBL _clienteBL;
@@ -15,63 +17,58 @@ namespace HotelApp.W.Controllers.Api
             _clienteBL = clienteBL;
         }
 
-         
+        /// <summary>Lista todos los registros de clientes.</summary>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Cliente>>> Get()
         {
-            var clientes = await _clienteBL.GetAllAsync();
-            return Ok(clientes);
+            return Ok(await _clienteBL.GetAllAsync());
         }
 
-         
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> Get(int id)
+        /// <summary>Obtiene un registro de clientes por su id.</summary>
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Cliente>> GetById(int id)
         {
             var cliente = await _clienteBL.GetByIdAsync(id);
+            return cliente == null ? NotFound() : Ok(cliente);
+        }
 
-            if (cliente == null)
+        /// <summary>Crea un registro de clientes.</summary>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Cliente>> Post(Cliente cliente)
+        {
+            cliente.IdCliente = 0;
+            await _clienteBL.AddAsync(cliente);
+            return CreatedAtAction(nameof(GetById), new { id = cliente.IdCliente }, cliente);
+        }
+
+        /// <summary>Actualiza un registro de clientes.</summary>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Cliente>> Put(int id, Cliente cliente)
+        {
+            if (id != cliente.IdCliente)
+                return BadRequest(new { mensaje = "El id de la URL no coincide con el del cuerpo." });
+
+            if (!await _clienteBL.UpdateAsync(cliente))
                 return NotFound();
 
             return Ok(cliente);
         }
 
-         
-        [HttpPost]
-        public async Task<IActionResult> Post(Cliente cliente)
-        {
-            await _clienteBL.AddAsync(cliente);
-
-            return Ok(new
-            {
-                mensaje = "Cliente creado correctamente"
-            });
-        }
-
-        
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Cliente cliente)
-        {
-            if (id != cliente.IdCliente)
-                return BadRequest();
-
-            await _clienteBL.UpdateAsync(cliente);
-
-            return Ok(new
-            {
-                mensaje = "Cliente actualizado correctamente"
-            });
-        }
-
-       
-        [HttpDelete("{id}")]
+        /// <summary>Elimina un registro de clientes.</summary>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            await _clienteBL.DeleteAsync(id);
-
-            return Ok(new
-            {
-                mensaje = "Cliente eliminado correctamente"
-            });
+            return await _clienteBL.DeleteAsync(id) ? NoContent() : NotFound();
         }
     }
 }
